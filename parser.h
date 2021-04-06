@@ -1,20 +1,20 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <cstring>
 #include <vector>
 #include <string>
-#include "meta.h"
 #include "util.h"
 #include "journal.h"
 
 class Values {
   public:
-  MetaStore metaStore;
+  std::map<std::string, std::string> metaDataMap;
   std::vector<Journal> journalVector;
 
-  Values():metaStore(MetaStore(std::vector<MetaData>())), journalVector(std::vector<Journal>()) {}
-  Values(MetaStore m, std::vector<Journal> j):metaStore(m), journalVector(j) {}
+  Values(): metaDataMap(), journalVector(std::vector<Journal>()) {}
+  Values(std::map<std::string, std::string> m, std::vector<Journal> j): metaDataMap(m), journalVector(j) {}
 };
 
 class Parser {
@@ -22,7 +22,7 @@ class Parser {
   public:
   static Values parse(std::string input) {
     std::vector<std::string> lines = split(input, '\n');
-    std::vector<MetaData> metaDataVector;
+    std::map<std::string, std::string> metaDataMap;
     std::vector<Journal> journals;
 
     for(int i=0; i<lines.size(); i++) {
@@ -31,7 +31,7 @@ class Parser {
         std::string name = x.at(0).substr(1, x.at(0).size()-1);
         std::string content = lines.at(i).substr(name.length()+2, (lines.at(i).size() - x.at(0).size()));
 
-        metaDataVector.push_back(MetaData(name, content));
+        metaDataMap[name] = content;
       }
 
       else { // journal
@@ -58,7 +58,8 @@ class Parser {
         journals.push_back(Journal(id, amount, time, debit, credit, narration));
       }
     }
-    MetaStore metaStore(metaDataVector);
-    return Values(metaStore, journals);
+
+    LOG("DONE");
+    return Values(metaDataMap, journals);
   }
 };

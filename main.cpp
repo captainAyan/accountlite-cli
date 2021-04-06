@@ -3,7 +3,7 @@
 #include <fstream>
 #include "parser.h"
 #include "journal.h"
-#include "meta.h"
+#include "util.h"
 
 int main()
 {
@@ -14,10 +14,7 @@ int main()
                 (std::istreambuf_iterator<char>()));
     
     Values values(Parser::parse(input));
-
-    values.metaStore.print();
-
-    std::cout << values.journalVector.at(0).getNarration() << std::endl;
+    LOG(values.journalVector.at(0).getNarration());
 
     return 0;
 }
