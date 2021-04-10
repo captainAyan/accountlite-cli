@@ -13,7 +13,7 @@ int main()
     input.assign((std::istreambuf_iterator<char>(ifs)),
                 (std::istreambuf_iterator<char>()));
     
-    Values values(Parser::parse(input));
+    Values values(parse(input));
     LOG(values.journalVector.at(0).getNarration());
 
     return 0;
