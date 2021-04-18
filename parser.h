@@ -8,7 +8,7 @@
 #include "util.h"
 #include "journal.h"
 
-class Values {
+class Values { // TODO don't actually need this class, let's use c++ multiple return using pointer.
   public:
   std::map<std::string, std::string> metaDataMap;
   std::vector<Journal> journalVector;
@@ -17,7 +17,7 @@ class Values {
   Values(std::map<std::string, std::string> m, std::vector<Journal> j): metaDataMap(m), journalVector(j) {}
 };
 
-Values parse(std::string input) {
+Values parse(const std::string& input) {
   std::vector<std::string> lines = split(input, '\n');
   std::map<std::string, std::string> metaDataMap;
   std::vector<Journal> journals;

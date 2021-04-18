@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">Account Lite 💡</h1>
   <p align="center">
-    Lightweight Double-Entry Accounting Software
+    Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
     <a href="https://github.com/captainAyan/accountlite/issues">Report Bug 😓</a>
   </p>
@@ -29,7 +29,7 @@ book.bk | This is our own format of storing the data. the values starting with H
 journal.h | This is a model for 'Journal Entries' (if you don't know what that is, check double-entry system on wikipedia)
 main.cpp | Duh 😒
 make.bat | This file compiles the program 
-parser.h | This file contains two very important things i.e. parse  function and Values class. <br /><br />**Parser**: The parser function takes in an array of strings (the string elements are lines from the book.bk file), parses those strings and stores the data in the *Values* class. <br /><br />**Values**: The instance of Values class contains two 'public properties' (Lol 😂) i.e. metaDataMap, and journalVector. The 'metaDataMap' stores a c++ 'Map' with the meta data values. The 'journalVector' contain vector of Journal (Journal class).
+parser.h | This file contains two very important things i.e. parse  function and Values class. <br /><br />**Parser**: The parser function takes in a strings, parses those strings and stores the data in the *Values* class. <br /><br />**Values**: The instance of Values class contains two 'public properties' (Lol 😂) i.e. metaDataMap, and journalVector. The 'metaDataMap' stores a c++ 'Map' with the meta data values. The 'journalVector' contain vector of Journal (Journal class).
 util.h | Contains some miscellaneous utility functions.
 
 ## Contribution
