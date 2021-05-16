@@ -8,19 +8,12 @@
 #include "util.h"
 #include "journal.h"
 
-class Values { // TODO don't actually need this class, let's use c++ multiple return using pointer.
-  public:
-  std::map<std::string, std::string> metaDataMap;
-  std::vector<Journal> journalVector;
+void parse(const std::string& input, std::vector<Journal>* _journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
 
-  Values(): metaDataMap(), journalVector(std::vector<Journal>()) {}
-  Values(std::map<std::string, std::string> m, std::vector<Journal> j): metaDataMap(m), journalVector(j) {}
-};
-
-Values parse(const std::string& input) {
   std::vector<std::string> lines = split(input, '\n');
-  std::map<std::string, std::string> metaDataMap;
-  std::vector<Journal> journals;
+  std::map<std::string, std::string> _metaDataMap;
+  std::vector<Journal> _journals;
 
   for(int i=0; i<lines.size(); i++) {
     if (lines.at(i).at(0) == '#') { // meta
@@ -28,7 +21,7 @@ Values parse(const std::string& input) {
       std::string name = x.at(0).substr(1, x.at(0).size()-1);
       std::string content = lines.at(i).substr(name.length()+2, (lines.at(i).size() - x.at(0).size()));
   
-      metaDataMap[name] = content;
+      _metaDataMap[name] = content;
     }
 
     else { // journal
@@ -52,9 +45,10 @@ Values parse(const std::string& input) {
       +e.at(4).size() + 5;
       std::string narration = lines.at(i).substr(l, lines.at(i).size()-l);
 
-      journals.push_back(Journal(id, amount, time, debit, credit, narration));
+      _journals.push_back(Journal(id, amount, time, debit, credit, narration));
     }
   }
 
-  return Values(metaDataMap, journals);
+  *_journalList = _journals;
+  *metaDataMap = _metaDataMap;
 }
