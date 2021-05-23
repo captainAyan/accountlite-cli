@@ -36,10 +36,29 @@ std::string timestampToString(const time_t rawtime) {
   return date_string;
 }
 
+int timestampNow() {
+  return std::time(nullptr);
+}
+
 // this function returns number of dots (given in as parameter) in a string
 // cash A/c ............... Dr. (this kind of dots)
 std::string dots(int x) {
   std::string s;
   for (int i = 0; i < x; i++) s += ".";
   return s;
+}
+
+bool ledgerNameValidator(std::string& s) {
+  size_t f = s.find(',');
+  if (f != std::string::npos) return false;
+  else return true;
+}
+
+void printCredit() {
+  std::cout << "######################################" << std::endl;
+  std::cout << "#                                    #" << std::endl;
+  std::cout << "#   WELCOME TO ACCOUNTLITE           #" << std::endl;
+  std::cout << "#               - Ayan Chakraborty   #" << std::endl;
+  std::cout << "#                                    #" << std::endl;
+  std::cout << "######################################" << std::endl;
 }

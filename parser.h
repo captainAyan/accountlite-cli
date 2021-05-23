@@ -5,10 +5,11 @@
 #include <cstring>
 #include <vector>
 #include <string>
+
 #include "util.h"
 #include "journal.h"
 
-void parse(const std::string& input, std::vector<Journal>* _journalList, 
+void parse(const std::string& input, std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
 
   std::vector<std::string> lines = split(input, '\n');
@@ -49,6 +50,28 @@ void parse(const std::string& input, std::vector<Journal>* _journalList,
     }
   }
 
-  *_journalList = _journals;
+  *journalList = _journals;
   *metaDataMap = _metaDataMap;
+}
+
+std::string stringfy(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  std::string output = "";
+
+  std::map<std::string, std::string>::iterator itr;
+  for (itr = metaDataMap->begin(); itr != metaDataMap->end(); itr++) {
+    std::string b = "#";
+    b += itr->first;
+    b += '=';
+    b += itr->second;
+    b += '\n';
+    output += b;
+  }
+
+  for (size_t i = 0; i < journalList->size(); i++) {
+    output += journalList->at(i).stringfy();
+    output += "\n";
+  }
+
+  return output;
 }

@@ -57,6 +57,7 @@
     "xtr1common": "cpp",
     "xtree": "cpp",
     "xutility": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "*.txt": "cpp"
   }
 }

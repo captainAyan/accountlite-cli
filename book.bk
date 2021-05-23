@@ -1,6 +1,6 @@
-#NAME=lol cat
 #BUSINESS=lol co.
 #CURRENCY=Rs.
 #CURRENCY_FORMAT=ind
-1,500,1421113156,cash,bank,being cash withdrawn from bank, and did something else
+#NAME=lol cat
+1,500,1421113156,cash,bank,being cash withdrawn from bank
 2,300,1621193156,bank,cash,being cash deposited into bank

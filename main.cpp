@@ -2,27 +2,58 @@
 #include <ctime>
 #include <fstream>
 #include <map>
+
 #include "parser.h"
 #include "journal.h"
 #include "statement.h"
+#include "util.h"
+#include "ui.h"
 
 int main()
 {
 
-  std::ifstream ifs("./book.bk");
-  std::string input;
-  input.assign((std::istreambuf_iterator<char>(ifs)), 
-                (std::istreambuf_iterator<char>()));
+  const std::string FILE_NAME = "./book.bk";
 
   std::vector<Journal> journalList;
   std::map<std::string, std::string> metaDataMap;
 
+  std::ifstream ifs(FILE_NAME);
+  std::string input;
+  input.assign((std::istreambuf_iterator<char>(ifs)), 
+                (std::istreambuf_iterator<char>()));
+
+  std::ofstream myfile;
+  myfile.open ("example.txt");
+  myfile << "Writing this to a file.\n";
+  myfile.close();
+
   parse(input, &journalList, &metaDataMap);
 
-  // journal entries
-  // displayJournalEntries(journalList, metaDataMap["CURRENCY"]);
-  // trial balance
-  displayTrialBalance(journalList, metaDataMap["CURRENCY"]);
+  printCredit();
+
+  // Read–eval–print loop
+  while(true) {
+    std::string input;
+    std::cout << "> ";
+    std::getline(std::cin, input);
+
+    // exit
+    if(input == ":exit") return EXIT_SUCCESS;
+    // add journal entry
+    else if(input == "j") {
+      UI::addJournalEntry(&journalList);
+      std::ofstream f;
+      f.open (FILE_NAME);
+      f << stringfy(&journalList, &metaDataMap);
+      f.close();
+    }
+    // view trial balance
+    else if(input == "t") displayTrialBalance(journalList, metaDataMap["CURRENCY"]);
+    // view journals
+    else if(input == "jd") displayJournalEntries(journalList, metaDataMap["CURRENCY"]);
+    // invalid
+    else std::cout << "Unknown command" << std::endl;
+  }
 
   return EXIT_SUCCESS;
 }
