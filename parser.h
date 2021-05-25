@@ -9,6 +9,8 @@
 #include "util.h"
 #include "journal.h"
 
+namespace parser {
+
 void parse(const std::string& input, std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
 
@@ -54,7 +56,7 @@ void parse(const std::string& input, std::vector<Journal>* journalList,
   *metaDataMap = _metaDataMap;
 }
 
-std::string stringfy(std::vector<Journal>* journalList, 
+std::string stringify(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
   std::string output = "";
 
@@ -74,4 +76,6 @@ std::string stringfy(std::vector<Journal>* journalList,
   }
 
   return output;
+}
+
 }

@@ -22,7 +22,7 @@ int main()
   input.assign((std::istreambuf_iterator<char>(ifs)), 
                 (std::istreambuf_iterator<char>()));
 
-  parse(input, &journalList, &metaDataMap);
+  parser::parse(input, &journalList, &metaDataMap);
 
   printCredit();
 
@@ -39,7 +39,7 @@ int main()
       UI::addJournalEntry(&journalList);
       std::ofstream f;
       f.open (FILE_NAME);
-      f << stringfy(&journalList, &metaDataMap);
+      f << parser::stringify(&journalList, &metaDataMap);
       f.close();
     }
     // view trial balance
