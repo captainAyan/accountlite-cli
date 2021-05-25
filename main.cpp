@@ -1,7 +1,8 @@
 #include <iostream>
 #include <ctime>
-#include <fstream>
 #include <map>
+
+#define FILE_NAME "./book.bk"
 
 #include "parser.h"
 #include "journal.h"
@@ -11,8 +12,6 @@
 
 int main()
 {
-
-  const std::string FILE_NAME = "./book.bk";
 
   std::vector<Journal> journalList;
   std::map<std::string, std::string> metaDataMap;
@@ -35,13 +34,7 @@ int main()
     // exit
     if(input == ":exit") return EXIT_SUCCESS;
     // add journal entry
-    else if(input == "j") {
-      UI::addJournalEntry(&journalList);
-      std::ofstream f;
-      f.open (FILE_NAME);
-      f << parser::stringify(&journalList, &metaDataMap);
-      f.close();
-    }
+    else if(input == "j") UI::addJournalEntry(&journalList, &metaDataMap);
     // view trial balance
     else if(input == "t") displayTrialBalance(journalList, metaDataMap["CURRENCY"]);
     // view journals

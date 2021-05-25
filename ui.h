@@ -2,13 +2,16 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "journal.h"
 #include "util.h"
 
 namespace UI {
 
-void addJournalEntry(std::vector<Journal>* _journalList) {
+void addJournalEntry(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  
   std::string debit, credit, narration;
   int amount;
 
@@ -57,11 +60,21 @@ void addJournalEntry(std::vector<Journal>* _journalList) {
   if(narration == ":exit") return; // check for exit command
 
   // calculating the journal id
-  int id = _journalList->size() + 1;
+  int id = journalList->size() + 1;
   
   // adding the journal
-  _journalList->push_back(Journal(id, amount, timestampNow(), debit, credit, narration));
+  journalList->push_back(Journal(id, amount, timestampNow(), debit, credit, narration));
 
+  try {
+    std::ofstream f;
+    f.open (FILE_NAME);
+    f << parser::stringify(journalList, metaDataMap);
+    f.close();
+  }
+  catch(const std::exception &ex) {
+    std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
+    journalList->pop_back();
+  }
   std::cout << "Journal #" <<id<< " Entered" << std::endl;
 
 }
