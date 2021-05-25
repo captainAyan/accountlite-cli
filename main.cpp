@@ -36,9 +36,9 @@ int main()
     // add journal entry
     else if(input == "j") UI::addJournalEntry(&journalList, &metaDataMap);
     // view trial balance
-    else if(input == "t") displayTrialBalance(journalList, metaDataMap["CURRENCY"]);
+    else if(input == "t") statement::trialBalance(journalList, metaDataMap["CURRENCY"]);
     // view journals
-    else if(input == "jd") displayJournalEntries(journalList, metaDataMap["CURRENCY"]);
+    else if(input == "jd") statement::journalEntries(journalList, metaDataMap["CURRENCY"]);
     // invalid
     else std::cout << "Unknown command" << std::endl;
   }

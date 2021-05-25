@@ -5,7 +5,9 @@
 #include "util.h"
 #include "table.h"
 
-void displayTrialBalance(std::vector<Journal> journalList, std::string currency) {
+namespace statement {
+
+void trialBalance(std::vector<Journal> journalList, std::string currency) {
   std::map<std::string, int> ledgerBalances;
   for(size_t i=0; i < journalList.size(); i++){
     ledgerBalances[journalList[i].getDebit()] += journalList[i].getAmount();
@@ -40,7 +42,7 @@ void displayTrialBalance(std::vector<Journal> journalList, std::string currency)
   table.draw();
 }
 
-void displayJournalEntries(std::vector<Journal> journalList, std::string currency) {
+void journalEntries(std::vector<Journal> journalList, std::string currency) {
   clitable::Table table;
   short particular_column_size = 30;
 
@@ -68,4 +70,5 @@ void displayJournalEntries(std::vector<Journal> journalList, std::string currenc
     table.addRow(r);
   }
   table.draw();
+}
 }
