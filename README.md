@@ -29,7 +29,10 @@ book.bk | This is our own format of storing the data. the values starting with H
 journal.h | This is a model for 'Journal Entries' (if you don't know what that is, check double-entry system on wikipedia)
 main.cpp | Duh 😒
 make.bat | This file compiles the program 
-parser.h | This file contains two very important things i.e. parse  function and Values class. <br /><br />**Parser**: The parser function takes in a strings, parses those strings and stores the data in the *Values* class. <br /><br />**Values**: The instance of Values class contains two 'public properties' (Lol 😂) i.e. metaDataMap, and journalVector. The 'metaDataMap' stores a c++ 'Map' with the meta data values. The 'journalVector' contain vector of Journal (Journal class).
+parser.h | This file contains `parser` namespace, which is there to help 'parse' and 'stringify' the data of the ***book.bk*** file.
+statement.h | This file contains methods for printing out statements (In this context statements also mean Journal, Ledger, and Trial Balance, although journal and ledger are not actually statements)
+table.h | Check out [CppCliTable](https://github.com/captainAyan/CppCliTable)
+ui.h | This file contains methods for complex or multi-step interactions.
 util.h | Contains some miscellaneous utility functions.
 
 ## Contribution
