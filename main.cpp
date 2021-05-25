@@ -22,11 +22,6 @@ int main()
   input.assign((std::istreambuf_iterator<char>(ifs)), 
                 (std::istreambuf_iterator<char>()));
 
-  std::ofstream myfile;
-  myfile.open ("example.txt");
-  myfile << "Writing this to a file.\n";
-  myfile.close();
-
   parse(input, &journalList, &metaDataMap);
 
   printCredit();
