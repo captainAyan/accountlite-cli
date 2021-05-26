@@ -16,6 +16,7 @@
 #define LOG_MAP(key, value)
 #endif
 
+// split string with delimeter
 std::vector<std::string> split(std::string strToSplit, char delimeter) {
   std::stringstream ss(strToSplit);
   std::string item;
@@ -36,6 +37,7 @@ std::string timestampToString(const time_t rawtime) {
   return date_string;
 }
 
+// gives the current timestamp
 int timestampNow() {
   return std::time(nullptr);
 }
@@ -48,12 +50,14 @@ std::string dots(int x) {
   return s;
 }
 
+// ledger name validator (ledger names cannot contain comma)
 bool ledgerNameValidator(std::string& s) {
   size_t f = s.find(',');
   if (f != std::string::npos) return false;
   else return true;
 }
 
+// credit printing at the start of the application
 void printCredit() {
   std::cout << "######################################" << std::endl;
   std::cout << "#                                    #" << std::endl;
