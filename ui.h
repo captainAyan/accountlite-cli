@@ -70,12 +70,12 @@ void addJournalEntry(std::vector<Journal>* journalList,
     f.open (FILE_NAME);
     f << parser::stringify(journalList, metaDataMap);
     f.close();
+    std::cout << "Journal #" <<id<< " Entered" << std::endl;
   }
   catch(const std::exception &ex) {
     std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
     journalList->pop_back();
   }
-  std::cout << "Journal #" <<id<< " Entered" << std::endl;
 
 }
 
