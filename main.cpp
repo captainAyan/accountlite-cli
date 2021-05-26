@@ -22,7 +22,7 @@ int main()
   std::string input;
   std::ifstream infile(FILE_NAME);
   if(!infile.good()) { // first time setup
-    UI::setupDatabase(&journalList, &metaDataMap);
+    ui::setupDatabase(&journalList, &metaDataMap);
   }
   else { // not first time
     input.assign((std::istreambuf_iterator<char>(ifs)), 
@@ -39,7 +39,7 @@ int main()
     // exit
     if(input == ":exit") return EXIT_SUCCESS;
     // add journal entry
-    else if(input == "j") UI::addJournalEntry(&journalList, &metaDataMap);
+    else if(input == "j") ui::addJournalEntry(&journalList, &metaDataMap);
     // view trial balance
     else if(input == "t") statement::trialBalance(&journalList, metaDataMap["CURRENCY"]);
     // view journals

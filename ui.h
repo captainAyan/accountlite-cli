@@ -7,7 +7,7 @@
 #include "journal.h"
 #include "util.h"
 
-namespace UI {
+namespace ui {
 
 void addJournalEntry(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
