@@ -79,4 +79,46 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
 }
 
+void setupDatabase(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  
+  std::cout << "Setup by filling out the questionair." << std::endl;
+
+  std::map<std::string, std::string> _metaDataMap;
+  
+  // default presets
+  _metaDataMap["CURRENCY"] = "Rs.";
+  _metaDataMap["CURRENCY_FORMAT"] = "ind";
+  
+  // set of questions
+  std::string questions[2][2]={ // [question][key in the database]
+    {"Business name : ", "BUSINESS"},
+    {"Your Name : ", "NAME"}
+  };
+
+  // ask questions
+  for(size_t i=0; i < std::size(questions); i++) {
+    std::cout << questions[i][0];
+    std::string a;
+    std::getline(std::cin, a);
+    if(a == ":exit") i--; // check for exit command
+    else {
+      _metaDataMap[questions[i][1]] = a;
+    }
+  }
+
+  *metaDataMap = _metaDataMap;
+
+  try {
+    std::ofstream f;
+    f.open (FILE_NAME);
+    f << parser::stringify(journalList, metaDataMap);
+    f.close();
+    std::cout << "Done setuping up." << std::endl;
+  }
+  catch(const std::exception &ex) {
+    std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
+  }
+}
+
 }

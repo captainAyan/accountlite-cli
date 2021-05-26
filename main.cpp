@@ -16,14 +16,19 @@ int main()
   std::vector<Journal> journalList;
   std::map<std::string, std::string> metaDataMap;
 
+  printCredit();
+  
   std::ifstream ifs(FILE_NAME);
   std::string input;
-  input.assign((std::istreambuf_iterator<char>(ifs)), 
-                (std::istreambuf_iterator<char>()));
-
-  parser::parse(input, &journalList, &metaDataMap);
-
-  printCredit();
+  std::ifstream infile(FILE_NAME);
+  if(!infile.good()) { // first time setup
+    UI::setupDatabase(&journalList, &metaDataMap);
+  }
+  else { // not first time
+    input.assign((std::istreambuf_iterator<char>(ifs)), 
+                  (std::istreambuf_iterator<char>()));
+    parser::parse(input, &journalList, &metaDataMap);
+  }
 
   // Read–eval–print loop
   while(true) {
