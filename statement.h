@@ -4,14 +4,15 @@
 
 #include "util.h"
 #include "table.h"
+#include "journal.h"
 
 namespace statement {
 
-void trialBalance(std::vector<Journal> journalList, std::string currency) {
+void trialBalance(std::vector<Journal>* journalList, std::string currency) {
   std::map<std::string, int> ledgerBalances;
-  for(size_t i=0; i < journalList.size(); i++){
-    ledgerBalances[journalList[i].getDebit()] += journalList[i].getAmount();
-    ledgerBalances[journalList[i].getCredit()] -= journalList[i].getAmount();
+  for(size_t i=0; i < journalList->size(); i++){
+    ledgerBalances[journalList->at(i).getDebit()] += journalList->at(i).getAmount();
+    ledgerBalances[journalList->at(i).getCredit()] -= journalList->at(i).getAmount();
   }
 
   clitable::Table table;
@@ -42,7 +43,7 @@ void trialBalance(std::vector<Journal> journalList, std::string currency) {
   table.draw();
 }
 
-void journalEntries(std::vector<Journal> journalList, std::string currency) {
+void journalEntries(std::vector<Journal>* journalList, std::string currency) {
   clitable::Table table;
   short particular_column_size = 30;
 
@@ -55,17 +56,17 @@ void journalEntries(std::vector<Journal> journalList, std::string currency) {
 
   for (size_t i = 0; i < 4; i++) table.addColumn(c[i]);
 
-  for (size_t i = 0; i < journalList.size(); i++) {
-    std::string particulars = journalList[i].getDebit() + " A/c";
-    particulars += dots((particular_column_size - journalList[i].getDebit().size())-7) + "Dr.";
-    particulars += "To. " + journalList[i].getCredit() + " A/c\n";
-    particulars += "(" + journalList[i].getNarration() + ")";
+  for (size_t i = 0; i < journalList->size(); i++) {
+    std::string particulars = journalList->at(i).getDebit() + " A/c";
+    particulars += dots((particular_column_size - journalList->at(i).getDebit().size())-7) + "Dr.";
+    particulars += "To. " + journalList->at(i).getCredit() + " A/c\n";
+    particulars += "(" + journalList->at(i).getNarration() + ")";
 
     std::string r[4] {
-      timestampToString(journalList[i].getTime()),
+      timestampToString(journalList->at(i).getTime()),
       particulars,
-      currency+std::to_string(journalList[i].getAmount()),
-      "\n"+currency+std::to_string( journalList[i].getAmount())
+      currency+std::to_string(journalList->at(i).getAmount()),
+      "\n"+currency+std::to_string( journalList->at(i).getAmount())
     };
     table.addRow(r);
   }
