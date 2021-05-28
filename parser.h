@@ -71,7 +71,7 @@ std::string stringify(std::vector<Journal>* journalList,
   }
 
   for (size_t i = 0; i < journalList->size(); i++) {
-    output += journalList->at(i).stringfy();
+    output += journalList->at(i).stringify();
     output += "\n";
   }
 

@@ -42,7 +42,7 @@ class Journal {
     return _narration;
   }
 
-  std::string stringfy() {
+  std::string stringify() {
 
     return std::to_string(_id)+","+std::to_string(_amount)
     +","+std::to_string(_time)+","+_debit+","+_credit+","+_narration;
