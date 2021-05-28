@@ -48,7 +48,7 @@ int main()
     // view journals using dates
     else if(input == "jdf") ui::viewJournalEntriesWithDateFilter(&journalList, &metaDataMap);
     // invalid
-    else std::cout << "Unknown command" << std::endl;
+    else std::cout << "Unknown command." << std::endl;
   }
 
   return EXIT_SUCCESS;
