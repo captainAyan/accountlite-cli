@@ -4,6 +4,8 @@
 
 #define FILE_NAME "./book.bk"
 
+// #define DEBUG
+
 #include "parser.h"
 #include "journal.h"
 #include "statement.h"

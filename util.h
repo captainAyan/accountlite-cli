@@ -6,14 +6,10 @@
 #include <iostream>
 #include <ctime>
 
-// #define DEBUG
-
 #ifdef DEBUG
 #define LOG(x) std::cout << x << std::endl
-#define LOG_MAP(key, value) std::cout << key << " : " << value << std::endl
 #else
 #define LOG(x)
-#define LOG_MAP(key, value)
 #endif
 
 // split string with delimeter
