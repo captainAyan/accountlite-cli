@@ -19,7 +19,7 @@ int main()
   std::map<std::string, std::string> metaDataMap;
 
   printCredit();
-  
+
   std::ifstream ifs(FILE_NAME);
   std::string input;
   std::ifstream infile(FILE_NAME);
@@ -34,9 +34,8 @@ int main()
 
   // Read–eval–print loop
   while(true) {
-    std::string input;
     std::cout << "> ";
-    std::getline(std::cin, input);
+    std::string input = getInput();
 
     // exit
     if(input == ":exit") return EXIT_SUCCESS;

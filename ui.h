@@ -17,7 +17,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
   // taking debit account number input
   std::cout << "DEBIT ";
-  std::getline(std::cin, debit);
+  debit = getInput();
   if(debit == ":exit") return; // check for exit command
   if(!isLedgerNameValidator(debit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
@@ -26,7 +26,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
   // taking credit account number input
   std::cout << "CREDIT ";
-  std::getline(std::cin, credit);
+  credit = getInput();
   if(credit == ":exit") return; // check for exit command
   else if(!isLedgerNameValidator(credit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
@@ -35,8 +35,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
   // taking the amount input
   std::cout << "AMOUNT ";
-  std::string a;
-  std::getline(std::cin, a);
+  std::string a = getInput();
   if(a == ":exit") return; // check for exit command
   try {
     amount = std::stoi(a); // converting string input into number
@@ -56,7 +55,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
   // taking narration input
   std::cout << "NARRATION ";
-  std::getline(std::cin, narration);
+  narration = getInput();
   if(narration == ":exit") return; // check for exit command
 
   // calculating the journal id
@@ -99,8 +98,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   // ask questions
   for(size_t i=0; i < std::size(questions); i++) {
     std::cout << questions[i][0];
-    std::string a;
-    std::getline(std::cin, a);
+    std::string a = getInput();
     if(a == ":exit") i--; // check for exit command
     else {
       _metaDataMap[questions[i][1]] = a;
@@ -128,7 +126,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
 
   // starting date
   std::cout << "FROM : <DD/MM/YYYY> ";
-  std::getline(std::cin, from_date_str);
+  from_date_str = getInput();
   if(from_date_str == ":exit") return; // check for exit command
   if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid" << std::endl;
@@ -140,7 +138,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
 
   // ending date
   std::cout << "TO : <DD/MM/YYYY> ";
-  std::getline(std::cin, to_date_str);
+  to_date_str = getInput();
   if(to_date_str == ":exit") return; // check for exit command
   if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid" << std::endl;
