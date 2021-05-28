@@ -19,7 +19,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   std::cout << "DEBIT ";
   std::getline(std::cin, debit);
   if(debit == ":exit") return; // check for exit command
-  if(!ledgerNameValidator(debit)) {
+  if(!isLedgerNameValidator(debit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
     return;
   }
@@ -28,7 +28,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   std::cout << "CREDIT ";
   std::getline(std::cin, credit);
   if(credit == ":exit") return; // check for exit command
-  else if(!ledgerNameValidator(credit)) {
+  else if(!isLedgerNameValidator(credit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
     return;
   }

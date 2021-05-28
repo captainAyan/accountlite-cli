@@ -27,7 +27,7 @@ std::vector<std::string> split(std::string strToSplit, char delimeter) {
   return splittedStrings;
 }
 
-// this function turns timestamps in to dd/mm/yyyy format e.g.17/05/2021, 03/05/2020
+// this function turns timestamps into DD/MM/YYYY format e.g.17/05/2021, 03/05/2020
 std::string timestampToString(const time_t rawtime) {
   tm *ltm = localtime(&rawtime);
   std::string date_string = (std::to_string(ltm->tm_mday).size()<2 ? "0":"") + std::to_string(ltm->tm_mday) + "/";
@@ -70,7 +70,7 @@ std::string dots(int x) {
 }
 
 // ledger name validator (ledger names cannot contain comma)
-bool ledgerNameValidator(std::string& s) {
+bool isLedgerNameValidator(std::string& s) {
   size_t f = s.find(',');
   if (f != std::string::npos) return false;
   else return true;
