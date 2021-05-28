@@ -37,6 +37,25 @@ std::string timestampToString(const time_t rawtime) {
   return date_string;
 }
 
+// this function turns "DD/MM/YYYY" into timestamp
+int dateStringToTimestamp(std::string& d) {
+  std::vector<std::string> a = split(d, '/');
+  int day, month, year;
+  day = std::stoi(a.at(0));
+  month = std::stoi(a.at(1));
+  year = std::stoi(a.at(2));
+
+  struct tm t = {0};
+  t.tm_mday = day;
+  t.tm_mon = month - 1;
+  t.tm_year = year - 1900;
+
+  time_t when = mktime(&t); // the when variable gives the timestamp
+  const struct tm *norm = localtime(&when);
+
+  return when;
+}
+
 // gives the current timestamp
 int timestampNow() {
   return std::time(nullptr);
@@ -55,6 +74,30 @@ bool ledgerNameValidator(std::string& s) {
   size_t f = s.find(',');
   if (f != std::string::npos) return false;
   else return true;
+}
+
+// check if date is valid or not (DD/MM/YYYY format)
+bool isValidDateString(std::string& d) {
+  try {
+    std::vector<std::string> a = split(d, '/');
+    int day, month, year;
+    day = std::stoi(a.at(0));
+    month = std::stoi(a.at(1));
+    year = std::stoi(a.at(2));
+
+    struct tm t = {0};
+    t.tm_mday = day;
+    t.tm_mon = month - 1;
+    t.tm_year = year - 1900;
+
+    time_t when = mktime(&t); // the when variable gives the timestamp
+    const struct tm *norm = localtime(&when);
+
+    return (norm->tm_mday == day    &&
+            norm->tm_mon  == month - 1 &&
+            norm->tm_year == year - 1900);
+  }
+  catch(std::invalid_argument e) {return false;}
 }
 
 // credit printing at the start of the application

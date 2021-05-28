@@ -72,4 +72,25 @@ void journalEntries(std::vector<Journal>* journalList, std::string currency) {
   }
   table.draw();
 }
+
+void journalEntriesByDate(std::vector<Journal>* journalList, std::string currency, 
+  int from_time, int to_time) {
+
+  // filter journal with from_time and to_time
+  std::vector<Journal> filteredJournalList;
+
+  // filtering process
+  for (size_t i = 0; i < journalList->size(); i++) {
+    if (journalList->at(i).getTime() > from_time && 
+        journalList->at(i).getTime() < to_time) {
+      filteredJournalList.push_back(journalList->at(i));
+    }
+    if (journalList->at(i).getTime() > to_time) break;    
+  }
+
+  // drawing the entries
+  journalEntries(&filteredJournalList, currency);
+
+}
+
 }

@@ -121,4 +121,38 @@ void setupDatabase(std::vector<Journal>* journalList,
   }
 }
 
+void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  std::string from_date_str, to_date_str;
+  int from_date_timestamp, to_date_timestamp;
+
+  // starting date
+  std::cout << "FROM : <DD/MM/YYYY> ";
+  std::getline(std::cin, from_date_str);
+  if(from_date_str == ":exit") return; // check for exit command
+  if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
+    std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid" << std::endl;
+    return;
+  }
+  else { // date is valid
+    from_date_timestamp = dateStringToTimestamp(from_date_str);
+  }
+
+  // ending date
+  std::cout << "TO : <DD/MM/YYYY> ";
+  std::getline(std::cin, to_date_str);
+  if(to_date_str == ":exit") return; // check for exit command
+  if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
+    std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid" << std::endl;
+    return;
+  }
+  else { // date is valid
+    to_date_timestamp = dateStringToTimestamp(to_date_str);
+  }
+
+  // printing the journals
+  statement::journalEntriesByDate(journalList, (*metaDataMap)["CURRENCY"], from_date_timestamp, to_date_timestamp);
+
+}
+
 }
