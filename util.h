@@ -93,7 +93,7 @@ bool isValidDateString(std::string& d) {
             norm->tm_mon  == month - 1 &&
             norm->tm_year == year - 1900);
   }
-  catch(std::invalid_argument e) {return false;}
+  catch(std::exception e) {return false;}
 }
 
 // credit printing at the start of the application
