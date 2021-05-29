@@ -161,6 +161,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   }
   else { // date is valid
     to_date_timestamp = dateStringToTimestamp(to_date_str);
+    to_date_timestamp += 24*60*60; // since the last date needs to be also included
   }
 
   // printing the journals
