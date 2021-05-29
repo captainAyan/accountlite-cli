@@ -93,4 +93,22 @@ void journalEntriesByDate(std::vector<Journal>* journalList, std::string currenc
 
 }
 
+void trialBalanceAsOnDate(std::vector<Journal>* journalList, std::string currency,
+  int as_on_date) {
+
+  // filter journal with from_time and to_time
+  std::vector<Journal> filteredJournalList;
+
+  // filtering process
+  for (size_t i = 0; i < journalList->size(); i++) {
+    if (journalList->at(i).getTime() < as_on_date) {
+      filteredJournalList.push_back(journalList->at(i));
+    }
+    if (journalList->at(i).getTime() > as_on_date) break;    
+  }
+
+  // drawing the trial balance
+  trialBalance(&filteredJournalList, currency);
+}
+
 }

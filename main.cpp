@@ -43,6 +43,8 @@ int main()
     else if(input == "j") ui::addJournalEntry(&journalList, &metaDataMap);
     // view trial balance
     else if(input == "t") statement::trialBalance(&journalList, metaDataMap["CURRENCY"]);
+    // view trial balance "for the period ended on"/"as on date"
+    else if(input == "tp") ui::viewTrialBalanceAsOnDate(&journalList, &metaDataMap);
     // view journals
     else if(input == "jd") statement::journalEntries(&journalList, metaDataMap["CURRENCY"]);
     // view journals using dates
