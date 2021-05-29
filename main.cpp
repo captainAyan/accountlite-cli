@@ -6,6 +6,7 @@
 
 // #define DEBUG
 
+#include "commands.h"
 #include "parser.h"
 #include "journal.h"
 #include "statement.h"
@@ -38,19 +39,33 @@ int main()
     std::string input = getInput();
 
     // exit
-    if(input == ":exit") return EXIT_SUCCESS;
+    if(input == EXIT) 
+      return EXIT_SUCCESS;
+    
     // add journal entry
-    else if(input == "j") ui::addJournalEntry(&journalList, &metaDataMap);
+    else if(input == CREATE_JOURNAL) 
+      ui::addJournalEntry(&journalList, &metaDataMap);
+    
     // view trial balance
-    else if(input == "t") statement::trialBalance(&journalList, metaDataMap["CURRENCY"]);
+    else if(input == VIEW_TRIAL_BALANCE) 
+      statement::trialBalance(&journalList, metaDataMap["CURRENCY"]);
+    
     // view trial balance "for the period ended on"/"as on date"
-    else if(input == "tp") ui::viewTrialBalanceAsOnDate(&journalList, &metaDataMap);
+    else if(input == VIEW_TRIAL_BALANCE_FOR_THE_PERIOD) 
+      ui::viewTrialBalanceAsOnDate(&journalList, &metaDataMap);
+    
     // view journals
-    else if(input == "jd") statement::journalEntries(&journalList, metaDataMap["CURRENCY"]);
+    else if(input == VIEW_JOURNALS) 
+      statement::journalEntries(&journalList, metaDataMap["CURRENCY"]);
+    
     // view journals using dates
-    else if(input == "jdf") ui::viewJournalEntriesWithDateFilter(&journalList, &metaDataMap);
+    else if(input == VIEW_JOURNALS_FOR_THE_PERIOD) 
+      ui::viewJournalEntriesWithDateFilter(&journalList, &metaDataMap);
+    
     // clear screen
-    else if(input == "cls") std::system("cls");
+    else if(input == CLEAR_SCREEN) 
+      std::system("cls");
+    
     // invalid
     else std::cout << "Unknown command." << std::endl;
   }

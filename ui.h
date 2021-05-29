@@ -18,7 +18,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   // taking debit account number input
   std::cout << "DEBIT ";
   debit = getInput();
-  if(debit == ":exit") return; // check for exit command
+  if(debit == EXIT) return; // check for exit command
   if(!isLedgerNameValidator(debit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
     return;
@@ -31,7 +31,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   // taking credit account number input
   std::cout << "CREDIT ";
   credit = getInput();
-  if(credit == ":exit") return; // check for exit command
+  if(credit == EXIT) return; // check for exit command
   if(!isLedgerNameValidator(credit)) {
     std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
     return;
@@ -44,7 +44,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   // taking the amount input
   std::cout << "AMOUNT ";
   std::string a = getInput();
-  if(a == ":exit") return; // check for exit command
+  if(a == EXIT) return; // check for exit command
   try {
     amount = std::stoi(a); // converting string input into number
   }
@@ -64,7 +64,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   // taking narration input
   std::cout << "NARRATION ";
   narration = getInput();
-  if(narration == ":exit") return; // check for exit command
+  if(narration == EXIT) return; // check for exit command
   if(narration.length() == 0) {
     std::cout << "Invalid Narration: Narration cannot be empty." << std::endl;
     return;
@@ -111,7 +111,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   for(size_t i=0; i < std::size(questions); i++) {
     std::cout << questions[i][0];
     std::string a = getInput();
-    if(a == ":exit") i--; // check for exit command
+    if(a == EXIT) i--; // check for exit command
     else if(a.length() == 0) {
       std::cout << "Invalid Data: field cannot be empty." <<std::endl;
     }
@@ -142,7 +142,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   // starting date
   std::cout << "FROM : <DD/MM/YYYY> ";
   from_date_str = getInput();
-  if(from_date_str == ":exit") return; // check for exit command
+  if(from_date_str == EXIT) return; // check for exit command
   if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
@@ -154,7 +154,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   // ending date
   std::cout << "TO : <DD/MM/YYYY> ";
   to_date_str = getInput();
-  if(to_date_str == ":exit") return; // check for exit command
+  if(to_date_str == EXIT) return; // check for exit command
   if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
@@ -177,7 +177,7 @@ void viewTrialBalanceAsOnDate(std::vector<Journal>* journalList,
   // ending date
   std::cout << "AS ON : <DD/MM/YYYY>";
   as_on_date_str = getInput();
-  if(as_on_date_str == ":exit") return; // check for exit command
+  if(as_on_date_str == EXIT) return; // check for exit command
   if(!isValidDateString(as_on_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
