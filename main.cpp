@@ -49,6 +49,8 @@ int main()
     else if(input == "jd") statement::journalEntries(&journalList, metaDataMap["CURRENCY"]);
     // view journals using dates
     else if(input == "jdf") ui::viewJournalEntriesWithDateFilter(&journalList, &metaDataMap);
+    // clear screen
+    else if(input == "cls") std::system("cls");
     // invalid
     else std::cout << "Unknown command." << std::endl;
   }
