@@ -24,6 +24,10 @@ void trialBalance(std::vector<Journal>* journalList,
 
   std::string currency = (*metaDataMap)["CURRENCY"];
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
+  std::string businessName = (*metaDataMap)["BUSINESS"];
+
+  std::cout << std::endl << "In the books of " << businessName << std::endl;
+  std::cout << "As on " << timestampToString(as_on_date) << std::endl;
 
   std::map<std::string, int> ledgerBalances;
   for(size_t i=0; i < filteredJournalList.size(); i++){
@@ -67,6 +71,9 @@ void journalEntries(std::vector<Journal>* journalList,
 
   std::string currency = (*metaDataMap)["CURRENCY"];
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
+  std::string businessName = (*metaDataMap)["BUSINESS"];
+
+  std::cout << std::endl << "In the books of " << businessName <<std::endl;
 
   clitable::Column c[4] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
