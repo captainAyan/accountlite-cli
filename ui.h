@@ -161,7 +161,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   }
   else { // date is valid
     to_date_timestamp = dateStringToTimestamp(to_date_str);
-    to_date_timestamp += 24*60*60; // since the last date needs to be also included
+    to_date_timestamp += (24*60*60)-1; // since the last date needs to be also included
   }
 
   // printing the journals
@@ -185,7 +185,7 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   }
   else { // date is valid
     as_on_date_timestamp = dateStringToTimestamp(as_on_date_str);
-    as_on_date_timestamp += 24*60*60; // since the last date needs to be also included
+    as_on_date_timestamp += (24*60*60)-1; // since the last date needs to be also included
   }
 
   statement::trialBalance(journalList, metaDataMap, as_on_date_timestamp);
