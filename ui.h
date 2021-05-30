@@ -74,7 +74,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   int id = journalList->size() + 1;
   
   // adding the journal
-  journalList->push_back(Journal(id, amount, timestampNow(), debit, credit, narration));
+  journalList->push_back(Journal(id, amount, timestampNow(), toLowerCase(debit), toLowerCase(credit), narration));
 
   try {
     std::ofstream f;

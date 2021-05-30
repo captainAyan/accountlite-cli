@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <ctime>
+#include <algorithm>
 
 #ifdef DEBUG
 #define LOG(x) std::cout << x << std::endl
@@ -137,4 +138,9 @@ std::string formatCurrency(int amount, std::string type) {
     return a;
   }
   else return a;
+}
+
+std::string toLowerCase(std::string my_str)  {
+  std::transform(my_str.begin(), my_str.end(), my_str.begin(), ::tolower);
+  return my_str;
 }
