@@ -23,6 +23,7 @@ void trialBalance(std::vector<Journal>* journalList,
   }
 
   std::string currency = (*metaDataMap)["CURRENCY"];
+  std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
 
   std::map<std::string, int> ledgerBalances;
   for(size_t i=0; i < filteredJournalList.size(); i++){
@@ -44,13 +45,13 @@ void trialBalance(std::vector<Journal>* journalList,
     std::string r[3];
     r[0] = itr->first + " A/c";
     if (itr->second > 0) {
-      r[1] = currency + std::to_string(itr->second);
+      r[1] = currency + formatCurrency(itr->second, currencyFormat);
       r[2] = "-";
     }
     else if (itr->second < 0) {
       int v = itr->second * -1; // since negative values need to converted to positive
       r[1] = "-";
-      r[2] = currency + std::to_string(v);
+      r[2] = currency + formatCurrency(v, currencyFormat);
     }
     else continue;
     table.addRow(r);
@@ -65,6 +66,7 @@ void journalEntries(std::vector<Journal>* journalList,
   short particular_column_size = 30;
 
   std::string currency = (*metaDataMap)["CURRENCY"];
+  std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
 
   clitable::Column c[4] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
@@ -84,8 +86,8 @@ void journalEntries(std::vector<Journal>* journalList,
     std::string r[4] {
       timestampToString(journalList->at(i).getTime()),
       particulars,
-      currency+std::to_string(journalList->at(i).getAmount()),
-      "\n"+currency+std::to_string( journalList->at(i).getAmount())
+      currency+formatCurrency(journalList->at(i).getAmount(), currencyFormat),
+      "\n"+currency+formatCurrency( journalList->at(i).getAmount(), currencyFormat)
     };
     table.addRow(r);
   }

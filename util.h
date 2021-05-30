@@ -118,3 +118,23 @@ std::string getInput() {
   std::getline(std::cin, s);
   return trim(s);
 }
+
+std::string formatCurrency(int amount, std::string type) {
+  std::string a = std::to_string(amount);
+  if(type == "ind") {
+    // do the Indian 🇮🇳 formatting
+    if(a.size() > 3) a.insert(a.size()-3, 1, ',');
+    for(int i=a.length()-6; i>0; i-=2) {
+      a.insert(i, 1, ',');
+    }
+    return a;
+  }
+  else if(type == "int") {
+    // do the international formatting
+    for(int i=a.length()-3; i>0; i-=3) {
+        a.insert(i, 1, ',');
+    }
+    return a;
+  }
+  else return a;
+}
