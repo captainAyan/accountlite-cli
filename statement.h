@@ -11,7 +11,7 @@ namespace statement {
 void trialBalance(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap, int as_on_date) {
 
-  // filter journal with from_time and to_time
+  // filter journal with as_on_date
   std::vector<Journal> filteredJournalList;
 
   // if this condition is true, then filtering is not required (for optimization)
@@ -24,7 +24,7 @@ void trialBalance(std::vector<Journal>* journalList,
       if (journalList->at(i).getTime() < as_on_date) {
         filteredJournalList.push_back(journalList->at(i));
       }
-      if (journalList->at(i).getTime() > as_on_date) break;    
+      if (journalList->at(i).getTime() > as_on_date) break;
     }
   }
   
@@ -88,7 +88,7 @@ void journalEntries(std::vector<Journal>* journalList,
           journalList->at(i).getTime() < to_time) {
         filteredJournalList.push_back(journalList->at(i));
       }
-      if (journalList->at(i).getTime() > to_time) break;    
+      if (journalList->at(i).getTime() > to_time) break;
     }
   }
   
