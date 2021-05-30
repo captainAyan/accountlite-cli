@@ -45,14 +45,10 @@ int main()
     // add journal entry
     else if(input == CREATE_JOURNAL) 
       ui::addJournalEntry(&journalList, &metaDataMap);
-    
-    // view trial balance
-    else if(input == VIEW_TRIAL_BALANCE) 
-      statement::trialBalance(&journalList, metaDataMap["CURRENCY"]);
-    
+
     // view trial balance "for the period ended on"/"as on date"
-    else if(input == VIEW_TRIAL_BALANCE_FOR_THE_PERIOD) 
-      ui::viewTrialBalanceAsOnDate(&journalList, &metaDataMap);
+    else if(input == VIEW_TRIAL_BALANCE) 
+      ui::viewTrialBalance(&journalList, &metaDataMap);
     
     // view journals
     else if(input == VIEW_JOURNALS) 

@@ -169,7 +169,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
 
 }
 
-void viewTrialBalanceAsOnDate(std::vector<Journal>* journalList, 
+void viewTrialBalance(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
   std::string as_on_date_str;
   int as_on_date_timestamp;
@@ -178,7 +178,8 @@ void viewTrialBalanceAsOnDate(std::vector<Journal>* journalList,
   std::cout << "AS ON : <DD/MM/YYYY>";
   as_on_date_str = getInput();
   if(as_on_date_str == EXIT) return; // check for exit command
-  if(!isValidDateString(as_on_date_str)) { // check for invalid date format or invalid date
+  if(as_on_date_str == "") as_on_date_timestamp = timestampNow();
+  else if(!isValidDateString(as_on_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
   }
@@ -187,7 +188,7 @@ void viewTrialBalanceAsOnDate(std::vector<Journal>* journalList,
     as_on_date_timestamp += 24*60*60; // since the last date needs to be also included
   }
 
-  statement::trialBalanceAsOnDate(journalList, (*metaDataMap)["CURRENCY"], as_on_date_timestamp);
+  statement::trialBalance(journalList, metaDataMap, as_on_date_timestamp);
 }
 
 }

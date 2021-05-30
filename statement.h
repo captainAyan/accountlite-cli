@@ -8,11 +8,26 @@
 
 namespace statement {
 
-void trialBalance(std::vector<Journal>* journalList, std::string currency) {
+void trialBalance(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap, int as_on_date) {
+
+  // filter journal with from_time and to_time
+  std::vector<Journal> filteredJournalList;
+
+  // filtering process
+  for (size_t i = 0; i < journalList->size(); i++) {
+    if (journalList->at(i).getTime() < as_on_date) {
+      filteredJournalList.push_back(journalList->at(i));
+    }
+    if (journalList->at(i).getTime() > as_on_date) break;    
+  }
+
+  std::string currency = (*metaDataMap)["CURRENCY"];
+
   std::map<std::string, int> ledgerBalances;
-  for(size_t i=0; i < journalList->size(); i++){
-    ledgerBalances[journalList->at(i).getDebit()] += journalList->at(i).getAmount();
-    ledgerBalances[journalList->at(i).getCredit()] -= journalList->at(i).getAmount();
+  for(size_t i=0; i < filteredJournalList.size(); i++){
+    ledgerBalances[filteredJournalList.at(i).getDebit()] += filteredJournalList.at(i).getAmount();
+    ledgerBalances[filteredJournalList.at(i).getCredit()] -= filteredJournalList.at(i).getAmount();
   }
 
   clitable::Table table;
@@ -91,24 +106,6 @@ void journalEntriesByDate(std::vector<Journal>* journalList, std::string currenc
   // drawing the entries
   journalEntries(&filteredJournalList, currency);
 
-}
-
-void trialBalanceAsOnDate(std::vector<Journal>* journalList, std::string currency,
-  int as_on_date) {
-
-  // filter journal with from_time and to_time
-  std::vector<Journal> filteredJournalList;
-
-  // filtering process
-  for (size_t i = 0; i < journalList->size(); i++) {
-    if (journalList->at(i).getTime() < as_on_date) {
-      filteredJournalList.push_back(journalList->at(i));
-    }
-    if (journalList->at(i).getTime() > as_on_date) break;    
-  }
-
-  // drawing the trial balance
-  trialBalance(&filteredJournalList, currency);
 }
 
 }
