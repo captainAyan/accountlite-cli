@@ -14,13 +14,20 @@ void trialBalance(std::vector<Journal>* journalList,
   // filter journal with from_time and to_time
   std::vector<Journal> filteredJournalList;
 
-  // filtering process
-  for (size_t i = 0; i < journalList->size(); i++) {
-    if (journalList->at(i).getTime() < as_on_date) {
-      filteredJournalList.push_back(journalList->at(i));
-    }
-    if (journalList->at(i).getTime() > as_on_date) break;    
+  // if this condition is true, then filtering is not required (for optimization)
+  if(as_on_date > journalList->at(journalList->size()-1).getTime()) {
+    filteredJournalList = *journalList;
   }
+  else {
+    // filtering process
+    for (size_t i = 0; i < journalList->size(); i++) {
+      if (journalList->at(i).getTime() < as_on_date) {
+        filteredJournalList.push_back(journalList->at(i));
+      }
+      if (journalList->at(i).getTime() > as_on_date) break;    
+    }
+  }
+  
 
   std::string currency = (*metaDataMap)["CURRENCY"];
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
@@ -75,6 +82,7 @@ void journalEntries(std::vector<Journal>* journalList,
     filteredJournalList = *journalList;
   }
   else {
+    // filtering process
     for (size_t i = 0; i < journalList->size(); i++) {
       if (journalList->at(i).getTime() > from_time && 
           journalList->at(i).getTime() < to_time) {
