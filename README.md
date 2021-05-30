@@ -7,6 +7,8 @@
   </p>
 </p>
 
+[![Screenshot](https://raw.githubusercontent.com/captainAyan/accountlite/main/screenshots/1.png)](https://github.com/captainAyan/accountlite)
+
 ## About
 
 Account Lite is a lightweight accounting software with recording financial transactions (no inventory management available), classification(ledgers), and summarization(trial balance). The data is stored in a human readable format (which is very similar to CSV).
@@ -26,6 +28,7 @@ _Coming Soon_ 😁
 File Name | Description
 -|-|
 book.bk | This is our own format of storing the data. the values starting with Hash sign (#) are meta data, and the others are journal entries.
+commands.h | This file contains all the valid commands
 journal.h | This is a model for 'Journal Entries' (if you don't know what that is, check double-entry system on wikipedia)
 main.cpp | Duh 😒
 make.bat | This file compiles the program 
