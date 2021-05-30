@@ -58,9 +58,13 @@ void trialBalance(std::vector<Journal>* journalList,
   table.draw();
 }
 
-void journalEntries(std::vector<Journal>* journalList, std::string currency) {
+void journalEntries(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  
   clitable::Table table;
   short particular_column_size = 30;
+
+  std::string currency = (*metaDataMap)["CURRENCY"];
 
   clitable::Column c[4] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
@@ -88,8 +92,8 @@ void journalEntries(std::vector<Journal>* journalList, std::string currency) {
   table.draw();
 }
 
-void journalEntriesByDate(std::vector<Journal>* journalList, std::string currency, 
-  int from_time, int to_time) {
+void journalEntriesByDate(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap, int from_time, int to_time) {
 
   // filter journal with from_time and to_time
   std::vector<Journal> filteredJournalList;
@@ -104,7 +108,7 @@ void journalEntriesByDate(std::vector<Journal>* journalList, std::string currenc
   }
 
   // drawing the entries
-  journalEntries(&filteredJournalList, currency);
+  journalEntries(&filteredJournalList, metaDataMap);
 
 }
 

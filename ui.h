@@ -165,7 +165,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   }
 
   // printing the journals
-  statement::journalEntriesByDate(journalList, (*metaDataMap)["CURRENCY"], from_date_timestamp, to_date_timestamp);
+  statement::journalEntriesByDate(journalList, metaDataMap, from_date_timestamp, to_date_timestamp);
 
 }
 

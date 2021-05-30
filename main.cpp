@@ -52,7 +52,7 @@ int main()
     
     // view journals
     else if(input == VIEW_JOURNALS) 
-      statement::journalEntries(&journalList, metaDataMap["CURRENCY"]);
+      statement::journalEntries(&journalList, &metaDataMap);
     
     // view journals using dates
     else if(input == VIEW_JOURNALS_FOR_THE_PERIOD) 
