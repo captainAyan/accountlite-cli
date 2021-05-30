@@ -4,7 +4,7 @@
 
 #define FILE_NAME "./book.bk"
 
-// #define DEBUG
+#define DEBUG
 
 #include "commands.h"
 #include "parser.h"
@@ -52,11 +52,11 @@ int main()
     
     // view journals
     else if(input == VIEW_JOURNALS) 
-      statement::journalEntries(&journalList, &metaDataMap);
+      statement::journalEntries(&journalList, &metaDataMap, 0, timestampNow());
     
     // view journals using dates
     else if(input == VIEW_JOURNALS_FOR_THE_PERIOD) 
-      ui::viewJournalEntriesWithDateFilter(&journalList, &metaDataMap);
+      ui::viewJournalEntries(&journalList, &metaDataMap);
     
     // clear screen
     else if(input == CLEAR_SCREEN) 

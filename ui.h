@@ -134,7 +134,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   }
 }
 
-void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList, 
+void viewJournalEntries(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
   std::string from_date_str, to_date_str;
   int from_date_timestamp, to_date_timestamp;
@@ -165,7 +165,7 @@ void viewJournalEntriesWithDateFilter(std::vector<Journal>* journalList,
   }
 
   // printing the journals
-  statement::journalEntriesByDate(journalList, metaDataMap, from_date_timestamp, to_date_timestamp);
+  statement::journalEntries(journalList, metaDataMap, from_date_timestamp, to_date_timestamp);
 
 }
 
