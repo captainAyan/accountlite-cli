@@ -132,7 +132,7 @@ std::string formatCurrency(int amount, std::string type) {
   else if(type == "int") {
     // do the international formatting
     for(int i=a.length()-3; i>0; i-=3) {
-        a.insert(i, 1, ',');
+      a.insert(i, 1, ',');
     }
     return a;
   }
