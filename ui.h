@@ -175,7 +175,7 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   int as_on_date_timestamp;
 
   // ending date
-  std::cout << "AS ON : <DD/MM/YYYY>";
+  std::cout << "AS ON : <DD/MM/YYYY> ";
   as_on_date_str = getInput();
   if(as_on_date_str == EXIT) return; // check for exit command
   if(as_on_date_str == "") as_on_date_timestamp = timestampNow();
