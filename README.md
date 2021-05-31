@@ -35,7 +35,8 @@ book.bk | This is our own format of storing the data. the values starting with H
 commands.h | This file contains all the valid commands
 journal.h | This is a model for 'Journal Entries' (if you don't know what that is, check double-entry system on wikipedia)
 main.cpp | Duh 😒
-make.bat | This file compiles the program 
+make.bat | This file compiles the program for windows
+<span>make</span>.sh | This file compiles the program for mac and linux
 parser.h | This file contains `parser` namespace, which is there to help 'parse' and 'stringify' the data of the ***book.bk*** file.
 statement.h | This file contains methods for printing out statements (In this context statements also mean Journal, Ledger, and Trial Balance, although journal and ledger are not actually statements)
 table.h | Check out [CppCliTable](https://github.com/captainAyan/CppCliTable)
