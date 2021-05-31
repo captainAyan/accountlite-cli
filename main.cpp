@@ -57,7 +57,12 @@ int main()
     // view journals using dates
     else if(input == VIEW_JOURNALS_FOR_THE_PERIOD) 
       ui::viewJournalEntries(&journalList, &metaDataMap);
-    
+
+    // view journals using dates
+    else if(input == "l") {
+      statement::ledger(&journalList, &metaDataMap, 1421113256, timestampNow(), "cash");
+    }
+
     // clear screen
     else if(input == CLEAR_SCREEN) 
       std::system("cls");
