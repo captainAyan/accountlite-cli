@@ -18,11 +18,15 @@ Account Lite is a lightweight accounting software with recording financial trans
 _Coming Soon_ 😁
 
 ### As Developer
+⚠ You must have [MinGW](https://sourceforge.net/projects/mingw/) installed and setup on your computer. Check by typing `g++ --h` in your command line.
+
 #### Windows
 1. Clone the repo and enter the folder
 2. Run `make.bat` or `./make.bat`
+
 #### Linux & Mac
-_Coming Soon_ 😁
+1. Clone the repo and enter the folder
+2. Run `make.sh` or `./make.sh`
 
 ## File Description
 File Name | Description
