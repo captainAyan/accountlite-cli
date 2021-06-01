@@ -159,6 +159,7 @@ void ledger(std::vector<Journal>* journalList,
       else if (journalList->at(i).getTime() <= to_time) {
         if (journalList->at(i).getDebit() == account) {
           adjustedBalance += journalList->at(i).getAmount();
+          total += journalList->at(i).getAmount(); // total needs to keep track of one side
           debitSidePostings.push_back(journalList->at(i));
         }
         else { // if (journalList->at(i).getCredit() == account)
@@ -172,8 +173,10 @@ void ledger(std::vector<Journal>* journalList,
 
   // adjusting to get the actual closing balance
   closingBalance = openingBalance + adjustedBalance;
+
   // adjusting to get the total
-  // total = openingBalance + adjustedBalance*-1;
+  if (openingBalance > 0) total += openingBalance;
+  if (closingBalance < 0) total += closingBalance*-1;
 
   // drawing the statement
   clitable::Table table;
@@ -206,6 +209,9 @@ void ledger(std::vector<Journal>* journalList,
     if(dr > cr) maxLen = dr; // debit side has more posting
     else if(dr < cr) maxLen = cr; // credit side has more posting
     else maxLen = dr; // doesn't matter, both are some (dr == cr)
+    maxLen += 1; // one more for total amount
+
+    if (maxLen < 3) maxLen = 3; // opening balance row, closing balance row, total row
   }
 
   for (size_t i = 0; i < maxLen; i++) {
@@ -218,6 +224,7 @@ void ledger(std::vector<Journal>* journalList,
         r[2] = "-";
         r[3] = currency + formatCurrency(openingBalance, currencyFormat);
 
+        LOG(creditSidePostings.size());
         if(creditSidePostings.size() != 0) { // if there are postings
           r[4] = timestampToString(creditSidePostings.at(0).getTime());
           r[5] = "By." + creditSidePostings.at(0).getDebit() + " A/c";
@@ -233,6 +240,7 @@ void ledger(std::vector<Journal>* journalList,
         table.addRow(r);
       }
       else if(openingBalance < 0) { // credit balance
+        LOG(debitSidePostings.size());
         if(debitSidePostings.size() != 0) { // if there are postings
           r[0] = timestampToString(debitSidePostings.at(0).getTime());
           r[1] = "To." + debitSidePostings.at(0).getCredit() + " A/c";
@@ -246,7 +254,7 @@ void ledger(std::vector<Journal>* journalList,
         }
 
         r[4] = timestampToString(from_time);
-        r[5] = "By.Balance B/D";
+        r[5] = "By.balance B/D";
         r[6] = "-";
         r[7] = currency + formatCurrency((openingBalance * -1), currencyFormat);
 
@@ -254,7 +262,7 @@ void ledger(std::vector<Journal>* journalList,
       }
     }
 
-    else if(i == maxLen-1) {
+    else if(i == maxLen-2) { // last posting & balance posting (maxLen-2 means 2nd last index)
       if(closingBalance < 0) { // debit balance
         r[0] = timestampToString(to_time);
         r[1] = "To.balance C/D";
@@ -288,11 +296,21 @@ void ledger(std::vector<Journal>* journalList,
         }
 
         r[4] = timestampToString(to_time);
-        r[5] = "By.Balance C/D";
+        r[5] = "By.balance C/D";
         r[6] = "-";
         r[7] = currency + formatCurrency(closingBalance, currencyFormat);
         table.addRow(r);
       }
+    }
+
+    else if(i == maxLen-1) { // total of both side
+      r[0] = "TOTAL";
+      r[1] = "-"; r[2] = "-";
+      r[3] = currency + formatCurrency(total,currencyFormat);
+      r[4] = "TOTAL";
+      r[5] = "-"; r[6] = "-";
+      r[7] = currency + formatCurrency(total,currencyFormat);;
+      table.addRow(r);
     }
 
     else if (i != 0) { // all the other postings
@@ -326,10 +344,6 @@ void ledger(std::vector<Journal>* journalList,
   }
 
   table.draw();
-  LOG(openingBalance);
-  LOG(closingBalance);
-  LOG(adjustedBalance);
-  LOG(total);
 }
 
 }
