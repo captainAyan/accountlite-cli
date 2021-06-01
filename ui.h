@@ -191,4 +191,45 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   statement::trialBalance(journalList, metaDataMap, as_on_date_timestamp);
 }
 
+void viewLedger(std::vector<Journal>* journalList, 
+  std::map<std::string, std::string>* metaDataMap) {
+  std::string from_date_str, to_date_str, ledger_name;
+  int from_date_timestamp, to_date_timestamp;
+
+  // starting date
+  std::cout << "FROM : <DD/MM/YYYY> ";
+  from_date_str = getInput();
+  if(from_date_str == EXIT) return; // check for exit command
+  if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
+    std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
+    return;
+  }
+  else { // date is valid
+    from_date_timestamp = dateStringToTimestamp(from_date_str);
+  }
+
+  // ending date
+  std::cout << "TO : <DD/MM/YYYY> ";
+  to_date_str = getInput();
+  if(to_date_str == EXIT) return; // check for exit command
+  if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
+    std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
+    return;
+  }
+  else { // date is valid
+    to_date_timestamp = dateStringToTimestamp(to_date_str);
+    to_date_timestamp += (24*60*60)-1; // since the last date needs to be also included
+  }
+
+  // ledger name
+  std::cout << "ACCOUNT NAME : ";
+  ledger_name = getInput();
+  if(ledger_name == EXIT) return; // check for exit command
+  else if(ledger_name.length() == 0) {
+    std::cout << "Invalid Data: field cannot be empty." <<std::endl;
+  }
+
+  statement::ledger(journalList, metaDataMap, from_date_timestamp, to_date_timestamp, ledger_name);
+}
+
 }
