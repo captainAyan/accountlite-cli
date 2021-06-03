@@ -11,23 +11,16 @@ namespace statement {
 void trialBalance(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap, int as_on_date) {
 
-  // filter journal with as_on_date
-  std::vector<Journal> filteredJournalList;
+  // ledger balance (override the values)
+  std::map<std::string, int> ledgerBalances;
 
-  // if this condition is true, then filtering is not required (for optimization)
-  if(as_on_date > journalList->at(journalList->size()-1).getTime()) {
-    filteredJournalList = *journalList;
-  }
-  else {
-    // filtering process
-    for (size_t i = 0; i < journalList->size(); i++) {
-      if (journalList->at(i).getTime() < as_on_date) {
-        filteredJournalList.push_back(journalList->at(i));
-      }
-      if (journalList->at(i).getTime() > as_on_date) break;
+  for (size_t i = 0; i < journalList->size(); i++) {
+    if (journalList->at(i).getTime() < as_on_date) {
+      ledgerBalances[journalList->at(i).getDebit()] += journalList->at(i).getAmount();
+      ledgerBalances[journalList->at(i).getCredit()] -= journalList->at(i).getAmount();
     }
+    if (journalList->at(i).getTime() > as_on_date) break;
   }
-  
 
   std::string currency = (*metaDataMap)["CURRENCY"];
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
@@ -35,12 +28,6 @@ void trialBalance(std::vector<Journal>* journalList,
 
   std::cout << std::endl << "In the books of " << businessName << std::endl;
   std::cout << "As on " << timestampToString(as_on_date) << std::endl;
-
-  std::map<std::string, int> ledgerBalances;
-  for(size_t i=0; i < filteredJournalList.size(); i++){
-    ledgerBalances[filteredJournalList.at(i).getDebit()] += filteredJournalList.at(i).getAmount();
-    ledgerBalances[filteredJournalList.at(i).getCredit()] -= filteredJournalList.at(i).getAmount();
-  }
 
   clitable::Table table;
   clitable::Column c[3] = {
