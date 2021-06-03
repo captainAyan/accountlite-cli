@@ -38,6 +38,7 @@ void trialBalance(std::vector<Journal>* journalList,
 
   for (size_t i = 0; i < 3; i++) table.addColumn(c[i]);
 
+  int total = 0; // total at the end of trial balance
   std::map<std::string, int>::iterator itr;
   for (itr = ledgerBalances.begin(); itr != ledgerBalances.end(); itr++) {
     std::string r[3];
@@ -45,6 +46,7 @@ void trialBalance(std::vector<Journal>* journalList,
     if (itr->second > 0) {
       r[1] = currency + formatCurrency(itr->second, currencyFormat);
       r[2] = "-";
+      total += itr->second;
     }
     else if (itr->second < 0) {
       int v = itr->second * -1; // since negative values need to converted to positive
@@ -54,6 +56,12 @@ void trialBalance(std::vector<Journal>* journalList,
     else continue;
     table.addRow(r);
   }
+  std::string r[3] = {"TOTAL",
+    currency+formatCurrency(total, currencyFormat),
+    currency+formatCurrency(total, currencyFormat)
+  };
+  table.addRow(r);
+
   table.draw();
 }
 
