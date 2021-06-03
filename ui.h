@@ -41,6 +41,12 @@ void addJournalEntry(std::vector<Journal>* journalList,
     return;
   }
 
+  // debit and credit cannot have the same account
+  if (debit == credit) {
+    std::cout << "Invalid Ledger Name: Debit and Credit side cannot have the same ledger name." << std::endl;
+    return;
+  }
+
   // taking the amount input
   std::cout << "AMOUNT ";
   std::string a = getInput();
