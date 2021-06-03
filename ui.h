@@ -227,6 +227,7 @@ void viewLedger(std::vector<Journal>* journalList,
   if(ledger_name == EXIT) return; // check for exit command
   else if(ledger_name.length() == 0) {
     std::cout << "Invalid Data: field cannot be empty." <<std::endl;
+    return;
   }
 
   statement::ledger(journalList, metaDataMap, from_date_timestamp, to_date_timestamp, ledger_name);
