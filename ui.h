@@ -164,6 +164,11 @@ void viewJournalEntries(std::vector<Journal>* journalList,
     to_date_timestamp += (24*60*60)-1; // since the last date needs to be also included
   }
 
+  if (to_date_timestamp < from_date_timestamp) {
+    std::cout << "Invalid Date: Ending date is before Starting date." << std::endl;
+    return;
+  }
+
   // printing the journals
   statement::journalEntries(journalList, metaDataMap, from_date_timestamp, to_date_timestamp);
 
@@ -219,6 +224,11 @@ void viewLedger(std::vector<Journal>* journalList,
   else { // date is valid
     to_date_timestamp = dateStringToTimestamp(to_date_str);
     to_date_timestamp += (24*60*60)-1; // since the last date needs to be also included
+  }
+
+  if (to_date_timestamp < from_date_timestamp) {
+    std::cout << "Invalid Date: Ending date is before Starting date." << std::endl;
+    return;
   }
 
   // ledger name
