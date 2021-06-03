@@ -145,11 +145,16 @@ void viewJournalEntries(std::vector<Journal>* journalList,
   std::string from_date_str, to_date_str;
   int from_date_timestamp, to_date_timestamp;
 
+  // suggestion dates
+  std::string from_date_suggestion = timestampToString((timestampNow()-(7*24*60*60)));
+  std::string to_date_suggestion = timestampToString(timestampNow());
+
   // starting date
-  std::cout << "FROM : <DD/MM/YYYY> ";
+  std::cout << "FROM : <DD/MM/YYYY> [" + from_date_suggestion + "] ";
   from_date_str = getInput();
   if(from_date_str == EXIT) return; // check for exit command
-  if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
+  else if(from_date_str == "") from_date_timestamp = dateStringToTimestamp(from_date_suggestion); // using the suggestion date
+  else if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
   }
@@ -158,10 +163,11 @@ void viewJournalEntries(std::vector<Journal>* journalList,
   }
 
   // ending date
-  std::cout << "TO : <DD/MM/YYYY> ";
+  std::cout << "TO : <DD/MM/YYYY> [" + to_date_suggestion + "] ";
   to_date_str = getInput();
   if(to_date_str == EXIT) return; // check for exit command
-  if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
+  else if(to_date_str == "") to_date_timestamp = dateStringToTimestamp(to_date_suggestion)+(24*60*60)-1; // using the suggestion date
+  else if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
   }
@@ -185,11 +191,13 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   std::string as_on_date_str;
   int as_on_date_timestamp;
 
+  std::string as_on_date_suggestion = timestampToString(timestampNow());
+
   // ending date
-  std::cout << "AS ON : <DD/MM/YYYY> ";
+  std::cout << "AS ON : <DD/MM/YYYY> [" + as_on_date_suggestion + "] " ;
   as_on_date_str = getInput();
   if(as_on_date_str == EXIT) return; // check for exit command
-  if(as_on_date_str == "") as_on_date_timestamp = timestampNow();
+  else if(as_on_date_str == "") as_on_date_timestamp = dateStringToTimestamp(as_on_date_suggestion); // using the suggestion date
   else if(!isValidDateString(as_on_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
@@ -207,11 +215,16 @@ void viewLedger(std::vector<Journal>* journalList,
   std::string from_date_str, to_date_str, ledger_name;
   int from_date_timestamp, to_date_timestamp;
 
+  // suggestion dates
+  std::string from_date_suggestion = timestampToString((timestampNow()-(7*24*60*60)));
+  std::string to_date_suggestion = timestampToString(timestampNow());
+
   // starting date
-  std::cout << "FROM : <DD/MM/YYYY> ";
+  std::cout << "FROM : <DD/MM/YYYY> [" + from_date_suggestion + "] ";
   from_date_str = getInput();
   if(from_date_str == EXIT) return; // check for exit command
-  if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
+  else if(from_date_str == "") from_date_timestamp = dateStringToTimestamp(from_date_suggestion); // using the suggestion date
+  else if(!isValidDateString(from_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
   }
@@ -220,10 +233,11 @@ void viewLedger(std::vector<Journal>* journalList,
   }
 
   // ending date
-  std::cout << "TO : <DD/MM/YYYY> ";
+  std::cout << "TO : <DD/MM/YYYY> [" + to_date_suggestion + "] ";
   to_date_str = getInput();
   if(to_date_str == EXIT) return; // check for exit command
-  if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
+  else if(to_date_str == "") to_date_timestamp = dateStringToTimestamp(to_date_suggestion)+(24*60*60)-1; // using the suggestion date
+  else if(!isValidDateString(to_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
   }
