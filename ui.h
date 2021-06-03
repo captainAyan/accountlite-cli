@@ -127,7 +127,7 @@ void setupDatabase(std::vector<Journal>* journalList,
     f.open (FILE_NAME);
     f << parser::stringify(journalList, metaDataMap);
     f.close();
-    std::cout << "Done setuping up." << std::endl;
+    std::cout << "Setup Done." << std::endl;
   }
   catch(const std::exception &ex) {
     std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
