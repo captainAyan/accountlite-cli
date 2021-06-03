@@ -131,60 +131,87 @@ void ledger(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap, int from_time, int to_time, std::string account) {
 
   int openingBalance=0, closingBalance=0, adjustedBalance=0, total=0;
-  std::vector<Journal> debitSidePostings, creditSidePostings;
+  std::vector<std::array<std::string, 4>> drRows, crRows;
 
   std::string currency = (*metaDataMap)["CURRENCY"];
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
   std::string businessName = (*metaDataMap)["BUSINESS"];
 
+  // first loop  -> goes through all the entries (till starting date) for calculating opening balance
+  // second loop -> goes through all the entries (from starting date to ending date) sorting the postings into debit and credit side
+  size_t x = 0;
   for (size_t i = 0; i < journalList->size(); i++) {
-
     // entry is related to given account
+    x+=1;
     if (journalList->at(i).getDebit() == account 
-      || journalList->at(i).getCredit() == account) { 
-
-      // create check for entries like cash A/c to cash A/c (these entries have no effect on the outcome)
-      if (journalList->at(i).getDebit() == journalList->at(i).getCredit()) continue;
+      || journalList->at(i).getCredit() == account) {
 
       // calculation of opening balance
       if (journalList->at(i).getTime() < from_time) {
-        if (journalList->at(i).getDebit() == account) {
-          openingBalance += journalList->at(i).getAmount();
-        }
-        else { // if (journalList->at(i).getCredit() == account)
-          openingBalance -= journalList->at(i).getAmount();
-        }
+        if (journalList->at(i).getDebit() == account) openingBalance += journalList->at(i).getAmount();
+        else openingBalance -= journalList->at(i).getAmount();
       }
-      // calculation of closing balance
-      else if (journalList->at(i).getTime() <= to_time) {
-        if (journalList->at(i).getDebit() == account) {
-          adjustedBalance += journalList->at(i).getAmount();
-          total += journalList->at(i).getAmount(); // total needs to keep track of one side
-          debitSidePostings.push_back(journalList->at(i));
-        }
-        else { // if (journalList->at(i).getCredit() == account)
-          adjustedBalance -= journalList->at(i).getAmount();
-          creditSidePostings.push_back(journalList->at(i));
-        }
+      else {
+        // minus 1 because otherwise one entry will get ignored
+        if (i > 0) x = i-1;
+        else x = 0;
+        break;
       }
-      else break;
     }
   }
 
-  // adjusting to get the actual closing balance
-  closingBalance = openingBalance + adjustedBalance;
+  // added opening balance
+  if (openingBalance > 0) { // debit balance
+    std::array<std::string, 4> dr;
+    dr[0] = timestampToString(from_time);
+    dr[1] = "To.Balance B/D";
+    dr[2] = "-";
+    dr[3] = currency + formatCurrency(openingBalance, currencyFormat);
+    drRows.push_back(dr);
+  }
+  else if (openingBalance < 0) { // credit balance
+    std::array<std::string, 4> cr;
+    cr[0] = timestampToString(from_time);
+    cr[1] = "By.Balance B/D";
+    cr[2] = "-";
+    cr[3] = currency + formatCurrency((openingBalance*-1), currencyFormat);
+    crRows.push_back(cr);
+  }
 
-  // adjusting to get the total
-  if (openingBalance > 0) total += openingBalance;
-  if (closingBalance < 0) total += closingBalance*-1;
+  for (size_t i = x; i < journalList->size(); i++) {
+    if (journalList->at(i).getDebit() == account
+      || journalList->at(i).getCredit() == account) { 
 
-  // drawing the statement
+      // calculation of closing balance
+      if (journalList->at(i).getTime() <= to_time && journalList->at(i).getTime() > from_time) {
+        if (journalList->at(i).getDebit() == account) {
+          adjustedBalance += journalList->at(i).getAmount();
+          total += journalList->at(i).getAmount(); // total needs to keep track of one side
+          std::array<std::string, 4> dr;
+          dr[0] = timestampToString(journalList->at(i).getTime());
+          dr[1] = ("To." + journalList->at(i).getCredit() + " A/c");
+          dr[2] = std::to_string(journalList->at(i).getId());
+          dr[3] = currency + formatCurrency(journalList->at(i).getAmount(), currencyFormat);
+          drRows.push_back(dr);
+        }
+        else { // if (journalList->at(i).getCredit() == account)
+          adjustedBalance -= journalList->at(i).getAmount();
+          std::array<std::string, 4> cr;
+          cr[0] = timestampToString(journalList->at(i).getTime());
+          cr[1] = ("By." + journalList->at(i).getDebit() + " A/c");
+          cr[2] = std::to_string(journalList->at(i).getId());
+          cr[3] = currency + formatCurrency(journalList->at(i).getAmount(), currencyFormat);
+          crRows.push_back(cr);
+        }
+      }
+    }
+  }
+
+  // clitable boilerplate (drawing the statement)
   clitable::Table table;
   short particular_column_size = 16;
-
   std::cout << std::endl << "In the books of " << businessName <<std::endl;
   std::cout << account << " A/c" << std::endl;
-
   clitable::Column c[8] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
     clitable::Column("Particular", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,particular_column_size, clitable::Column::NON_RESIZABLE),
@@ -195,153 +222,93 @@ void ledger(std::vector<Journal>* journalList,
     clitable::Column("F", clitable::Column::CENTER_ALIGN, clitable::Column::RIGHT_ALIGN, 0,0, clitable::Column::RESIZABLE),
     clitable::Column("Amount", clitable::Column::CENTER_ALIGN, clitable::Column::RIGHT_ALIGN, 1,5, clitable::Column::RESIZABLE)
   };
-
   for (size_t i = 0; i < 8; i++) table.addColumn(c[i]);
 
-  int maxLen;
-  {
-    int dr=debitSidePostings.size(), cr=creditSidePostings.size();
-    if (openingBalance > 0) dr += 1; // opening balance is debit
-    if (openingBalance < 0) cr += 1; // opening balance is credit
-    if (closingBalance < 0) dr += 1; // closing balance is debit
-    if (closingBalance > 0) cr += 1; // closing balance is credit
+  // adjusting to get the actual closing balance
+  closingBalance = openingBalance + adjustedBalance;
 
-    if(dr > cr) maxLen = dr; // debit side has more posting
-    else if(dr < cr) maxLen = cr; // credit side has more posting
-    else maxLen = dr; // doesn't matter, both are some (dr == cr)
-    maxLen += 1; // one more for total amount
+  // maximum length of the ledger
+  size_t maxLen = drRows.size(); // just taking a default value
+  if (drRows.size() < crRows.size()) maxLen = crRows.size();
 
-    if (maxLen < 3) maxLen = 3; // opening balance row, closing balance row, total row
+  // added closing balance
+  if (closingBalance < 0) { // debit balance
+    std::array<std::string, 4> dr;
+    dr[0] = timestampToString(to_time);
+    dr[1] = "To.Balance C/D";
+    dr[2] = "-";
+    dr[3] = currency + formatCurrency((closingBalance*-1), currencyFormat);
+
+    // this code is for making sure the balance is the last item
+    if (drRows.size() == maxLen) {
+      drRows.push_back(dr);
+      maxLen += 1;
+    }
+    else {
+      // creating empty rows to make the balance apprear at the end
+      for(size_t i=drRows.size(); i<maxLen-1; i++) { // "< maxLen-1" means 2nd last, last one is reserved for the closing entry
+        std::array<std::string, 4> drBlank = {"","","",""};
+        drRows.push_back(drBlank);
+      }
+      drRows.push_back(dr);
+    }
+  }
+  else if (closingBalance > 0) { // credit balance
+    std::array<std::string, 4> cr;
+    cr[0] = timestampToString(to_time);
+    cr[1] = "By.Balance C/D";
+    cr[2] = "-";
+    cr[3] = currency + formatCurrency(closingBalance, currencyFormat);
+
+    // this code is for making sure the balance is the last item
+    if (crRows.size() == maxLen) {
+      crRows.push_back(cr);
+      maxLen += 1;
+    }
+    else {
+      // creating empty rows to make the balance apprear at the end
+      for(size_t i=crRows.size(); i<maxLen-1; i++) { // "< maxLen-1" means 2nd last, last one is reserved for the closing entry
+        std::array<std::string, 4> crBlank = {"","","",""};
+        crRows.push_back(crBlank);
+      }
+      crRows.push_back(cr);
+    }
   }
 
-  for (size_t i = 0; i < maxLen; i++) {
+  // adding all the rows to the table
+  for (size_t i=0; i<maxLen; i++) {
     std::string r[8];
-
-    if(i == 0) { // for printing the opening balance
-      if(openingBalance > 0) { // debit balance
-        r[0] = timestampToString(from_time);
-        r[1] = "To.balance B/D";
-        r[2] = "-";
-        r[3] = currency + formatCurrency(openingBalance, currencyFormat);
-
-        LOG(creditSidePostings.size());
-        if(creditSidePostings.size() != 0) { // if there are postings
-          r[4] = timestampToString(creditSidePostings.at(0).getTime());
-          r[5] = "By." + creditSidePostings.at(0).getDebit() + " A/c";
-          r[6] = std::to_string(creditSidePostings.at(0).getId());
-          r[7] = currency + formatCurrency(creditSidePostings.at(0).getAmount(), currencyFormat);
-
-          creditSidePostings.erase(creditSidePostings.begin()); // removing the first element
-        }
-        else { // if there are no more posting left
-          r[4] = ""; r[5] = ""; r[6] = ""; r[7] = "";
-        }
-
-        table.addRow(r);
-      }
-      else if(openingBalance < 0) { // credit balance
-        LOG(debitSidePostings.size());
-        if(debitSidePostings.size() != 0) { // if there are postings
-          r[0] = timestampToString(debitSidePostings.at(0).getTime());
-          r[1] = "To." + debitSidePostings.at(0).getCredit() + " A/c";
-          r[2] = std::to_string(debitSidePostings.at(0).getId());
-          r[3] = currency + formatCurrency(debitSidePostings.at(0).getAmount(), currencyFormat);
-
-          debitSidePostings.erase(debitSidePostings.begin()); // removing the first element
-        }
-        else { // if there are no more posting left
-          r[0] = ""; r[1] = ""; r[2] = ""; r[3] = "";
-        }
-
-        r[4] = timestampToString(from_time);
-        r[5] = "By.balance B/D";
-        r[6] = "-";
-        r[7] = currency + formatCurrency((openingBalance * -1), currencyFormat);
-
-        table.addRow(r);
-      }
+    if (drRows.size() > i ) {
+      r[0] = drRows.at(i)[0];
+      r[1] = drRows.at(i)[1];
+      r[2] = drRows.at(i)[2];
+      r[3] = drRows.at(i)[3];
     }
-
-    else if(i == maxLen-2) { // last posting & balance posting (maxLen-2 means 2nd last index)
-      if(closingBalance < 0) { // debit balance
-        r[0] = timestampToString(to_time);
-        r[1] = "To.balance C/D";
-        r[2] = "-";
-        r[3] = currency + formatCurrency((closingBalance * -1), currencyFormat);
-
-        if(creditSidePostings.size() != 0) { // if there are postings
-          r[4] = timestampToString(creditSidePostings.at(0).getTime());
-          r[5] = "By." + creditSidePostings.at(0).getDebit() + " A/c";
-          r[6] = std::to_string(creditSidePostings.at(0).getId());
-          r[7] = currency + formatCurrency(creditSidePostings.at(0).getAmount(), currencyFormat);
-
-          creditSidePostings.erase(creditSidePostings.begin()); // removing the first element
-        }
-        else { // if there are no more posting left
-          r[4] = ""; r[5] = ""; r[6] = ""; r[7] = "";
-        }
-        table.addRow(r);
-      }
-      else if(closingBalance > 0) { // credit balance
-        if(debitSidePostings.size() != 0) { // if there are postings
-          r[0] = timestampToString(debitSidePostings.at(0).getTime());
-          r[1] = "To." + debitSidePostings.at(0).getCredit() + " A/c";
-          r[2] = std::to_string(debitSidePostings.at(0).getId());
-          r[3] = currency + formatCurrency(debitSidePostings.at(0).getAmount(), currencyFormat);
-
-          debitSidePostings.erase(debitSidePostings.begin()); // removing the first element
-        }
-        else { // if there are no more posting left
-          r[0] = ""; r[1] = ""; r[2] = ""; r[3] = "";
-        }
-
-        r[4] = timestampToString(to_time);
-        r[5] = "By.balance C/D";
-        r[6] = "-";
-        r[7] = currency + formatCurrency(closingBalance, currencyFormat);
-        table.addRow(r);
-      }
+    else {r[0]=""; r[1]=""; r[2]=""; r[3]="";} // empty values
+    if (crRows.size() > i ) {
+      r[4] = crRows.at(i)[0];
+      r[5] = crRows.at(i)[1];
+      r[6] = crRows.at(i)[2];
+      r[7] = crRows.at(i)[3];
     }
+    else {r[4]=""; r[5]=""; r[6]=""; r[7]="";} // empty values
 
-    else if(i == maxLen-1) { // total of both side
-      r[0] = "TOTAL";
-      r[1] = "-"; r[2] = "-";
-      r[3] = currency + formatCurrency(total,currencyFormat);
-      r[4] = "TOTAL";
-      r[5] = "-"; r[6] = "-";
-      r[7] = currency + formatCurrency(total,currencyFormat);;
-      table.addRow(r);
-    }
-
-    else if (i != 0) { // all the other postings
-      if(debitSidePostings.size() != 0) { // if there are postings
-        r[0] = timestampToString(debitSidePostings.at(0).getTime());
-        r[1] = "To." + debitSidePostings.at(0).getCredit() + " A/c";
-        r[2] = std::to_string(debitSidePostings.at(0).getId());
-        r[3] = currency + formatCurrency(debitSidePostings.at(0).getAmount(), currencyFormat);
-
-        debitSidePostings.erase(debitSidePostings.begin()); // removing the first element
-      }
-      else { // if there are no more posting left
-        r[0] = ""; r[1] = ""; r[2] = ""; r[3] = "";
-      }
-
-      // printing the credit side
-      if(creditSidePostings.size() != 0) { // if there are postings
-        r[4] = timestampToString(creditSidePostings.at(0).getTime());
-        r[5] = "By." + creditSidePostings.at(0).getDebit() + " A/c";
-        r[6] = std::to_string(creditSidePostings.at(0).getId());
-        r[7] = currency + formatCurrency(creditSidePostings.at(0).getAmount(), currencyFormat);
-
-        creditSidePostings.erase(creditSidePostings.begin()); // removing the first element
-      }
-      else { // if there are no more posting left
-        r[4] = ""; r[5] = ""; r[6] = ""; r[7] = "";
-      }
-
-      table.addRow(r);
-    }
+    table.addRow(r);
   }
+
+  // adjusting to get the total
+  if (openingBalance > 0) total += openingBalance;
+  if (closingBalance < 0) total += closingBalance*-1;
+
+  // added the total
+  std::string r[8];
+  r[0] = "TOTAL";
+  r[1] = "-"; r[2] = "-";
+  r[3] = currency + formatCurrency(total, currencyFormat);
+  r[4] = "TOTAL";
+  r[5] = "-"; r[6] = "-";
+  r[7] = currency + formatCurrency(total, currencyFormat);
+  table.addRow(r);
 
   table.draw();
 }
