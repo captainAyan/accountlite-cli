@@ -230,7 +230,7 @@ void viewLedger(std::vector<Journal>* journalList,
     return;
   }
 
-  statement::ledger(journalList, metaDataMap, from_date_timestamp, to_date_timestamp, ledger_name);
+  statement::ledger(journalList, metaDataMap, from_date_timestamp, to_date_timestamp, toLowerCase(ledger_name));
 }
 
 }
