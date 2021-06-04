@@ -197,7 +197,7 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   std::cout << "AS ON : <DD/MM/YYYY> [" + as_on_date_suggestion + "] " ;
   as_on_date_str = getInput();
   if(as_on_date_str == EXIT) return; // check for exit command
-  else if(as_on_date_str == "") as_on_date_timestamp = dateStringToTimestamp(as_on_date_suggestion); // using the suggestion date
+  else if(as_on_date_str == "") as_on_date_timestamp = dateStringToTimestamp(as_on_date_suggestion)+(24*60*60)-1; // using the suggestion date
   else if(!isValidDateString(as_on_date_str)) { // check for invalid date format or invalid date
     std::cout << "Invalid Date: Date format should be DD/MM/YYYY and valid." << std::endl;
     return;
