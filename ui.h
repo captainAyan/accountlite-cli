@@ -99,7 +99,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
 void setupDatabase(std::vector<Journal>* journalList, 
   std::map<std::string, std::string>* metaDataMap) {
   
-  std::cout << "Setup by filling out the questionair." << std::endl;
+  std::cout << "Setup by filling out the questionnaire." << std::endl;
 
   std::map<std::string, std::string> _metaDataMap;
   
