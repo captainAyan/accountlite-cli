@@ -26,10 +26,13 @@ void trialBalance(std::vector<Journal>* journalList,
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
   std::string businessName = (*metaDataMap)["BUSINESS"];
 
-  std::cout << std::endl << "In the books of " << businessName << std::endl;
-  std::cout << "As on " << timestampToString(as_on_date) << std::endl;
+  std::cout << std::endl;
 
   clitable::Table table;
+
+  table.addTitle("In the books of " + businessName);
+  table.addTitle("As on " + timestampToString(as_on_date));
+
   clitable::Column c[3] = {
     clitable::Column("Particular", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,24, clitable::Column::NON_RESIZABLE),
     clitable::Column("Debit", clitable::Column::CENTER_ALIGN, clitable::Column::RIGHT_ALIGN, 1,5, clitable::Column::RESIZABLE),
@@ -94,7 +97,8 @@ void journalEntries(std::vector<Journal>* journalList,
   std::string currencyFormat = (*metaDataMap)["CURRENCY_FORMAT"];
   std::string businessName = (*metaDataMap)["BUSINESS"];
 
-  std::cout << std::endl << "In the books of " << businessName <<std::endl;
+  std::cout << std::endl;
+  table.addTitle("In the books of " + businessName);
 
   clitable::Column c[4] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
@@ -205,8 +209,9 @@ void ledger(std::vector<Journal>* journalList,
   // clitable boilerplate (drawing the statement)
   clitable::Table table;
   short particular_column_size = 16;
-  std::cout << std::endl << "In the books of " << businessName <<std::endl;
-  std::cout << account << " A/c" << std::endl;
+  std::cout << std::endl;
+  table.addTitle("In the books of " + businessName);
+  table.addTitle(account + " A/c");
   clitable::Column c[8] = {
     clitable::Column("Date", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,10, clitable::Column::NON_RESIZABLE),
     clitable::Column("Particular", clitable::Column::CENTER_ALIGN, clitable::Column::LEFT_ALIGN, 1,particular_column_size, clitable::Column::NON_RESIZABLE),
