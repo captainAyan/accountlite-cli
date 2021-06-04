@@ -62,10 +62,15 @@ class Table {
   private:
   std::vector<Column> _columns;
   std::vector<std::vector<std::string>> _rows;
+  std::vector<std::string> _titles;
 
   public:
   void addColumn(Column c) {
     _columns.push_back(c);
+  }
+
+  void addTitle(std::string h) {
+    _titles.push_back(h);
   }
 
   void addRow(std::string t[]) {
@@ -86,10 +91,17 @@ class Table {
   }
 
   void draw() {
+    int width=1; // table width
     // just making a list (string list) of headers
     std::vector<std::string> headers;
-    for (size_t i = 0; i < _columns.size(); i++) 
+    for (size_t i = 0; i < _columns.size(); i++) {
       headers.push_back(_columns.at(i).getHeading());
+      width += (_columns.at(i).getSize() + 1);
+      width += (_columns.at(i).getPadding()*2);
+    }
+
+    for (size_t i=0; i<_titles.size(); i++)
+      printTitle(_titles.at(i), width);
 
     printSeparator('=', _columns);
     printRow(headers, _columns, true);
@@ -103,6 +115,13 @@ class Table {
 
 
   private: 
+  void printTitle(std::string title, int width) {
+    int padding = 0;
+    if(title.size() < width) padding = (width - title.size())/2;
+    for (size_t i=0; i<padding; i++) std::cout << " ";
+    std::cout << title << std::endl;
+  }
+
   void printSeparator(char dash, std::vector<Column> columns) {
     std::cout << '+';
     for (size_t i=0; i<columns.size(); i++) {
