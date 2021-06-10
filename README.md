@@ -3,6 +3,7 @@
   <p align="center">
     Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
+    <a href="https://github.com/captainAyan/accountlite/issues">Documentation</a> &nbsp;
     <a href="https://github.com/captainAyan/accountlite/issues">Report Bug 😓</a>
   </p>
 </p>
@@ -15,7 +16,7 @@ Account Lite is a lightweight accounting software with recording financial trans
 
 ## Getting Started
 ### As User
-_Coming Soon_ 😁
+Download the `accountlite.exe` binary executable file from the latest [release](https://github.com/captainAyan/accountlite/releases)
 
 ### As Developer
 ⚠ You must have [MinGW](https://sourceforge.net/projects/mingw/) installed and setup on your computer. Check by typing `g++ --h` in your command line.
@@ -28,7 +29,10 @@ _Coming Soon_ 😁
 1. Clone the repo and enter the folder
 2. Run `make.sh` or `./make.sh`
 
-## File Description
+## Documentation (For User)
+Documentation is available [here](https://captainayan.github.io/accountlite/#docs)
+
+## File Description (For Developer)
 File Name | Description
 -|-|
 book.bk | This is our own format of storing the data. the values starting with Hash sign (#) are meta data, and the others are journal entries.
