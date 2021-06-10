@@ -3,7 +3,7 @@
   <p align="center">
     Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
-    <a href="https://github.com/captainAyan/accountlite/issues">Documentation</a> &nbsp;
+    <a href="https://captainayan.github.io/accountlite/#docs">Documentation</a> &nbsp;
     <a href="https://github.com/captainAyan/accountlite/issues">Report Bug 😓</a>
   </p>
 </p>
