@@ -16,7 +16,7 @@ Account Lite is a lightweight accounting software with recording financial trans
 
 ## Getting Started
 ### As User
-Download the `accountlite.exe` binary executable file from the latest [release](https://github.com/captainAyan/accountlite/releases)
+Download the `accountlite.exe` binary executable file from the latest [release](https://github.com/captainAyan/accountlite/releases/latest)
 
 ### As Developer
 ⚠ You must have [MinGW](https://sourceforge.net/projects/mingw/) installed and setup on your computer. Check by typing `g++ --h` in your command line.
