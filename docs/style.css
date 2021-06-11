@@ -16,6 +16,12 @@ code {
   white-space: nowrap;
 }
 
+button {
+  background-color: #4C566A;
+  border: solid 2px #4C566A;
+  border-radius: 4px;
+}
+
 pre {
   background: #4C566A;
   overflow-y: hidden;
@@ -38,7 +44,7 @@ a:hover {
 }
 
 .nav {
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 
 .nav-item a {

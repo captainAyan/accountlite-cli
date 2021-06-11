@@ -18,9 +18,9 @@
       <h1 style="font-size:8vh">💡</h1>
       <h3>Account Lite</h3>
       <h5>Lightweight Command line Double-Entry Accounting 💸 Software 🚀</h5>
-      <br/>
-      <a href="https://github.com/captainAyan/accountlite/releases" target="_blank">
-        <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/captainayan/accountlite?style=for-the-badge">
+      <br />
+      <a id="download_button" download>
+        <button>Download &nbsp;<span id="version_label">Latest Version</span></button>
       </a>
     </div>
   </section>
@@ -40,7 +40,7 @@
     <h4>As User</h4>
     <p>
       Download the <code>accountlite.exe</code> binary executable file from the latest 
-      <a href="https://github.com/captainAyan/accountlite/releases" target="_blank">release</a>.
+      <a id="download_link" download>release</a>.
     </p>
 
     <h4>As Developer</h4>
@@ -290,4 +290,19 @@ ACCOUNT NAME : cash
   </footer>
 
 </body>
+
+<script>
+  (async () => {
+    const rawResponse = await fetch(
+      'https://api.github.com/repos/captainAyan/accountlite/releases/latest',
+      {method: 'GET'}
+    );
+    const content = await rawResponse.json();
+    let version_name = content.tag_name;
+    let download_url = `https://github.com/captainAyan/accountlite/releases/download/${version_name}/accountlite.exe`;
+    document.getElementById("download_button").href = download_url;
+    document.getElementById("download_link").href = download_url;
+    document.getElementById("version_label").innerText = version_name;
+  })();
+</script>
 </html>
