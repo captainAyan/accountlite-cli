@@ -6,6 +6,13 @@
 
 #define DEBUG
 
+// Selecting screen clear command according to OS
+#ifdef _WIN32
+#define CLEAR_COMMAND "cls"
+#else
+#define CLEAR_COMMAND "clear"
+#endif
+
 #include "commands.h"
 #include "parser.h"
 #include "journal.h"
@@ -63,9 +70,9 @@ int main()
       ui::viewLedger(&journalList, &metaDataMap);
 
     // clear screen
-    else if(input == CLEAR_SCREEN) 
-      std::system("cls");
-    
+    else if (input == CLEAR_SCREEN)
+      std::system(CLEAR_COMMAND);
+
     // invalid
     else std::cout << "Unknown command." << std::endl;
   }
