@@ -6,6 +6,7 @@
 #include <iostream>
 #include <ctime>
 #include <algorithm>
+#include <fstream>
 
 #ifdef DEBUG
 #define LOG(x) std::cout << x << std::endl
@@ -143,4 +144,11 @@ std::string formatCurrency(int amount, std::string type) {
 std::string toLowerCase(std::string my_str)  {
   std::transform(my_str.begin(), my_str.end(), my_str.begin(), ::tolower);
   return my_str;
+}
+
+void fileSave(std::string data) {
+  std::ofstream f;
+  f.open (FILE_NAME);
+  f << data;
+  f.close();
 }

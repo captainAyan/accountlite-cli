@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <string>
-#include <fstream>
 
 #include "journal.h"
 #include "util.h"
@@ -83,10 +82,7 @@ void addJournalEntry(std::vector<Journal>* journalList,
   journalList->push_back(Journal(id, amount, timestampNow(), toLowerCase(debit), toLowerCase(credit), narration));
 
   try {
-    std::ofstream f;
-    f.open (FILE_NAME);
-    f << parser::stringify(journalList, metaDataMap);
-    f.close();
+    fileSave(parser::stringify(journalList, metaDataMap));
     std::cout << "Journal #" <<id<< " Entered" << std::endl;
   }
   catch(const std::exception &ex) {
@@ -129,10 +125,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   *metaDataMap = _metaDataMap;
 
   try {
-    std::ofstream f;
-    f.open (FILE_NAME);
-    f << parser::stringify(journalList, metaDataMap);
-    f.close();
+    fileSave(parser::stringify(journalList, metaDataMap));
     std::cout << "Setup Done." << std::endl;
   }
   catch(const std::exception &ex) {
