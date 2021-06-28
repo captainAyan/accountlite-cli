@@ -65,7 +65,7 @@ void trialBalance(std::vector<Journal>* journalList,
   };
   table.addRow(r);
 
-  table.draw();
+  std::cout << table.draw();
 }
 
 void journalEntries(std::vector<Journal>* journalList, 
@@ -111,7 +111,7 @@ void journalEntries(std::vector<Journal>* journalList,
     else if(journalList->at(i).getTime() > to_time) break;
 
   }
-  table.draw();
+  std::cout << table.draw();
 }
 
 void ledger(std::vector<Journal>* journalList, 
@@ -298,7 +298,7 @@ void ledger(std::vector<Journal>* journalList,
   r[7] = currency + formatCurrency(total, currencyFormat);
   table.addRow(r);
 
-  table.draw();
+  std::cout << table.draw();
 }
 
 }

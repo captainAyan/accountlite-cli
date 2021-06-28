@@ -1,7 +1,7 @@
 /*
 
 This code is available in this repo 👇
-https://github.com/captainAyan/CppCliTable
+https://github.com/captainAyan/CppCliTable (v1.0.0)
 
 */
 
@@ -90,7 +90,8 @@ class Table {
     _rows.push_back(_t);
   }
 
-  void draw() {
+  std::string draw() {
+    std::string p = "";
     int width=1; // table width
     // just making a list (string list) of headers
     std::vector<std::string> headers;
@@ -101,40 +102,47 @@ class Table {
     }
 
     for (size_t i=0; i<_titles.size(); i++)
-      printTitle(_titles.at(i), width);
+      p += printTitle(_titles.at(i), width);
 
-    printSeparator('=', _columns);
-    printRow(headers, _columns, true);
-    printSeparator('=', _columns);
+    p += printSeparator('=', _columns);
+    p += printRow(headers, _columns, true);
+    p += printSeparator('=', _columns);
 
     for (size_t i=0; i<_rows.size(); i++) {
-      printRow(_rows.at(i), _columns, false);
-      printSeparator('-', _columns);
+      p += printRow(_rows.at(i), _columns, false);
+      p += printSeparator('-', _columns);
     }
+    return p;
   }
 
 
   private: 
-  void printTitle(std::string title, int width) {
+  std::string printTitle(std::string title, int width) {
+    std::string p = "";
     int padding = 0;
     if(title.size() < width) padding = (width - title.size())/2;
-    for (size_t i=0; i<padding; i++) std::cout << " ";
-    std::cout << title << std::endl;
+    for (size_t i=0; i<padding; i++) p += " ";
+    p += title + "\n";
+    return p;
   }
 
-  void printSeparator(char dash, std::vector<Column> columns) {
-    std::cout << '+';
+  std::string printSeparator(char dash, std::vector<Column> columns) {
+    std::string p = "";
+    p += '+';
     for (size_t i=0; i<columns.size(); i++) {
       int k = columns.at(i).getSize();
-      for(size_t j = 0; j<(k + columns.at(i).getPadding()*2); j++) std::cout << dash;
-      std::cout << '+';
+      for(size_t j = 0; j<(k + columns.at(i).getPadding()*2); j++) p += dash;
+      p += '+';
     }
-    std::cout << std::endl;
+    p += "\n";
+    return p;
   }
 
-  void printRow(std::vector<std::string> v, std::vector<Column> c, bool isHeader) {
+  std::string printRow(std::vector<std::string> v, std::vector<Column> c, bool isHeader) {
+    std::string p = "";
+
     // starting the row
-    std::cout << '|';
+    p += '|';
 
     std::vector<std::string> buffer;
 
@@ -197,18 +205,19 @@ class Table {
       }
 
       // printing the value
-      std::cout << value << "|";
+      p += value + "|";
     }
     // ending the row
-    std::cout << std::endl;
+    p += "\n";
 
     // checking if buffer is empty or not
     for (size_t i = 0; i < buffer.size(); i++) {
       if (buffer.at(i) != "") {
-        printRow(buffer, c, isHeader);
+        p += printRow(buffer, c, isHeader);
         break;
       }
     }
+    return p;
   }
 
   std::vector<std::string> split(std::string str, std::string token) {
