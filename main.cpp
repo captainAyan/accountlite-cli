@@ -1,17 +1,10 @@
 #include <iostream>
-#include <ctime>
+#include <cstdlib>
 #include <map>
 
 #define FILE_NAME "./book.bk"
 
 #define DEBUG
-
-// Selecting screen clear command according to OS
-#ifdef _WIN32
-#define CLEAR_COMMAND "cls"
-#else
-#define CLEAR_COMMAND "clear"
-#endif
 
 #include "commands.h"
 #include "parser.h"
@@ -70,8 +63,10 @@ int main()
       ui::viewLedger(&journalList, &metaDataMap);
 
     // clear screen
-    else if (input == CLEAR_SCREEN)
-      std::system(CLEAR_COMMAND);
+    else if (input == CLEAR_SCREEN) {
+      if (getenv ("SHELL")!=NULL) std::system("clear");
+      else std::system("cls");
+    }
 
     // invalid
     else std::cout << "Unknown command." << std::endl;
