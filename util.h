@@ -7,6 +7,7 @@
 #include <ctime>
 #include <algorithm>
 #include <fstream>
+#include <cstdlib>
 
 #ifdef DEBUG
 #define LOG(x) std::cout << x << std::endl
@@ -68,10 +69,11 @@ std::string dots(int x) {
 }
 
 // ledger name validator (ledger names cannot contain comma)
-bool isLedgerNameValidator(std::string& s) {
-  size_t f = s.find(',');
-  if (f != std::string::npos) return false;
-  else return true;
+Ledger* ledgerExists(std::string& s, std::vector<Ledger>* ledgerList) {
+  for(size_t i = 0; i<ledgerList->size(); i++) {
+    if(ledgerList->at(i).getName() == s) return &(ledgerList->at(i));
+  }
+  return NULL;
 }
 
 // check if date is valid or not (DD/MM/YYYY format)
@@ -151,4 +153,9 @@ void fileSave(std::string data) {
   f.open (FILE_NAME);
   f << data;
   f.close();
+}
+
+void clearScreen() {
+  if (getenv ("SHELL")!=NULL) std::system("clear");
+  else std::system("cls");
 }

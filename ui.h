@@ -3,27 +3,22 @@
 #include <iostream>
 #include <string>
 
-#include "journal.h"
-#include "util.h"
-
 namespace ui {
 
-void addJournalEntry(std::vector<Journal>* journalList, 
-  std::map<std::string, std::string>* metaDataMap) {
-  
+void addJournalEntry(std::vector<Entry>* entryList, std::vector<Ledger>* ledgerList,
+  std::vector<Journal>* journalList, std::map<std::string, std::string>* metaDataMap) {
+
   std::string debit, credit, narration;
   int amount;
+  Ledger *debitLedger, *creditLedger;
 
   // taking debit account number input
   std::cout << "DEBIT ";
   debit = getInput();
   if(debit == EXIT) return; // check for exit command
-  if(!isLedgerNameValidator(debit)) {
-    std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
-    return;
-  }
-  if(debit.length() == 0) {
-    std::cout << "Invalid Ledger Name: Ledger name cannot be empty." << std::endl;
+  debitLedger = ledgerExists(debit, ledgerList);
+  if(debitLedger == nullptr) {
+    std::cout << "Invalid Ledger: Ledger doesn't exist" << std::endl;
     return;
   }
 
@@ -31,12 +26,9 @@ void addJournalEntry(std::vector<Journal>* journalList,
   std::cout << "CREDIT ";
   credit = getInput();
   if(credit == EXIT) return; // check for exit command
-  if(!isLedgerNameValidator(credit)) {
-    std::cout << "Invalid Ledger Name: Cannot include comma in ledger name." << std::endl;
-    return;
-  }
-  if(credit.length() == 0) {
-    std::cout << "Invalid Ledger Name: Ledger name cannot be empty." << std::endl;
+  creditLedger = ledgerExists(credit, ledgerList);
+  if(creditLedger == nullptr) {
+    std::cout << "Invalid Ledger: Ledger doesn't exist" << std::endl;
     return;
   }
 
@@ -77,32 +69,36 @@ void addJournalEntry(std::vector<Journal>* journalList,
 
   // calculating the journal id
   int id = journalList->size() + 1;
-  
+
+  int timestamp = timestampNow();
+
   // adding the journal
-  journalList->push_back(Journal(id, amount, timestampNow(), toLowerCase(debit), toLowerCase(credit), narration));
+  journalList->push_back(Journal(id, amount, timestamp, *debitLedger, *creditLedger, narration));
+  entryList->push_back(Entry(id, amount, timestamp, debitLedger->getId(), creditLedger->getId(), narration));
 
   try {
-    fileSave(parser::stringify(journalList, metaDataMap));
+    fileSave(parser::stringify(entryList, ledgerList, metaDataMap));
     std::cout << "Journal #" <<id<< " Entered" << std::endl;
   }
   catch(const std::exception &ex) {
     std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
     journalList->pop_back();
+    entryList->pop_back();
   }
 
 }
 
-void setupDatabase(std::vector<Journal>* journalList, 
+void setupDatabase(std::vector<Entry>* entryList, std::vector<Ledger>* ledgerList,
   std::map<std::string, std::string>* metaDataMap) {
-  
+
   std::cout << "Setup by filling out the questionnaire." << std::endl;
 
   std::map<std::string, std::string> _metaDataMap;
-  
+
   // default presets
   _metaDataMap["CURRENCY"] = "Rs.";
   _metaDataMap["CURRENCY_FORMAT"] = "ind";
-  
+
   // set of questions
   std::string questions[2][2]={ // [question][key in the database]
     {"Business name : ", "BUSINESS"},
@@ -125,7 +121,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   *metaDataMap = _metaDataMap;
 
   try {
-    fileSave(parser::stringify(journalList, metaDataMap));
+    fileSave(parser::stringify(entryList, ledgerList, metaDataMap));
     std::cout << "Setup Done." << std::endl;
   }
   catch(const std::exception &ex) {
@@ -133,7 +129,7 @@ void setupDatabase(std::vector<Journal>* journalList,
   }
 }
 
-void viewJournalEntries(std::vector<Journal>* journalList, 
+void viewJournalEntries(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap) {
   std::string from_date_str, to_date_str;
   int from_date_timestamp, to_date_timestamp;
@@ -179,7 +175,7 @@ void viewJournalEntries(std::vector<Journal>* journalList,
 
 }
 
-void viewTrialBalance(std::vector<Journal>* journalList, 
+void viewTrialBalance(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap) {
   std::string as_on_date_str;
   int as_on_date_timestamp;
@@ -203,7 +199,7 @@ void viewTrialBalance(std::vector<Journal>* journalList,
   statement::trialBalance(journalList, metaDataMap, as_on_date_timestamp);
 }
 
-void viewLedger(std::vector<Journal>* journalList, 
+void viewLedger(std::vector<Journal>* journalList, std::vector<Ledger>* ledgerList,
   std::map<std::string, std::string>* metaDataMap) {
   std::string from_date_str, to_date_str, ledger_name;
   int from_date_timestamp, to_date_timestamp;
@@ -248,12 +244,90 @@ void viewLedger(std::vector<Journal>* journalList,
   std::cout << "ACCOUNT NAME : ";
   ledger_name = getInput();
   if(ledger_name == EXIT) return; // check for exit command
-  else if(ledger_name.length() == 0) {
-    std::cout << "Invalid Data: field cannot be empty." <<std::endl;
+  if(ledgerExists(ledger_name, ledgerList) == nullptr) {
+    std::cout << "Invalid Ledger: Ledger doesn't exist" << std::endl;
     return;
   }
 
   statement::ledger(journalList, metaDataMap, from_date_timestamp, to_date_timestamp, toLowerCase(ledger_name));
+}
+
+void createLedger(std::vector<Entry>* entryList, std::vector<Ledger>* ledgerList,
+  std::map<std::string, std::string>* metaDataMap) {
+  std::string name, type;
+
+  std::cout << "NAME ";
+  name = getInput();
+  if(name == EXIT) return; // check for exit command
+  if(ledgerExists(name, ledgerList) != nullptr) {
+    std::cout << "Invalid Ledger: Ledger already exists" << std::endl;
+    return;
+  }
+  if(name.length() == 0){
+    std::cout << "Invalid Ledger: Invalid ledger name" << std::endl;
+    return;
+  }
+
+  std::cout << std::endl << "REVENUE     - 0" << std::endl;
+  std::cout << "EXPENDITURE - 1" << std::endl;
+  std::cout << "ASSET       - 2" << std::endl;
+  std::cout << "LIABILITY   - 3" << std::endl;
+  std::cout << "EQUITY      - 4" << std::endl << std::endl;
+
+  std::cout << "TYPE ";
+  type = getInput();
+  if(name == EXIT) return; // check for exit command
+  if(!(type=="0"||type=="1"||type=="2"||type=="3"||type=="4")) {
+    std::cout << "Invalid Ledger: Not a valid ledger type" << std::endl;
+    return;
+  }
+
+  int id = ledgerList->size() + 1;
+  ledgerList->push_back(Ledger(id, std::stoi(type), name));
+
+  try {
+    fileSave(parser::stringify(entryList, ledgerList, metaDataMap));
+    std::cout << "Ledger #" <<id<< " Created" << std::endl;
+  }
+  catch(const std::exception &ex) {
+    std::cout << "Unknown Error: Something went wrong with the database file." << std::endl;
+    ledgerList->pop_back();
+  }
+
+}
+
+void viewLedgerList(std::vector<Ledger>* ledgerList) {
+  for (size_t i = 0; i < ledgerList->size(); i++)
+  {
+    Ledger l = ledgerList->at(i);
+    std::cout << l.getId() << " " << l.getName();
+
+    switch (l.getType())
+    {
+      case 0: {
+        std::cout << " [REVENUE]" << std::endl;
+        break;
+      }
+      case 1: {
+        std::cout << " [EXPENDITURE]" << std::endl;
+        break;
+      }
+      case 2: {
+        std::cout << " [ASSET]" << std::endl;
+        break;
+      }
+      case 3: {
+        std::cout << " [LIABILITY]" << std::endl;
+        break;
+      }
+      case 4: {
+        std::cout << " [EQUITY]" << std::endl;
+        break;
+      }
+    }
+
+  }
+
 }
 
 }

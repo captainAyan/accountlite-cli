@@ -2,13 +2,9 @@
 
 #include <iostream>
 
-#include "util.h"
-#include "table.h"
-#include "journal.h"
-
 namespace statement {
 
-void trialBalance(std::vector<Journal>* journalList, 
+void trialBalance(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap, int as_on_date) {
 
   // ledger balance (override the values)
@@ -16,8 +12,8 @@ void trialBalance(std::vector<Journal>* journalList,
 
   for (size_t i = 0; i < journalList->size(); i++) {
     if (journalList->at(i).getTime() < as_on_date) {
-      ledgerBalances[journalList->at(i).getDebit()] += journalList->at(i).getAmount();
-      ledgerBalances[journalList->at(i).getCredit()] -= journalList->at(i).getAmount();
+      ledgerBalances[journalList->at(i).getDebit().getName()] += journalList->at(i).getAmount();
+      ledgerBalances[journalList->at(i).getCredit().getName()] -= journalList->at(i).getAmount();
     }
     if (journalList->at(i).getTime() > as_on_date) break;
   }
@@ -68,7 +64,7 @@ void trialBalance(std::vector<Journal>* journalList,
   std::cout << table.draw();
 }
 
-void journalEntries(std::vector<Journal>* journalList, 
+void journalEntries(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap, int from_time, int to_time) {
 
   clitable::Table table;
@@ -92,12 +88,12 @@ void journalEntries(std::vector<Journal>* journalList,
 
   for (size_t i = 0; i < journalList->size(); i++) {
 
-    if (journalList->at(i).getTime() > from_time && 
+    if (journalList->at(i).getTime() > from_time &&
       journalList->at(i).getTime() < to_time) {
 
-      std::string particulars = journalList->at(i).getDebit() + " A/c";
-      particulars += dots((particular_column_size - journalList->at(i).getDebit().size())-7) + "Dr.";
-      particulars += "To. " + journalList->at(i).getCredit() + " A/c\n";
+      std::string particulars = journalList->at(i).getDebit().getName() + " A/c";
+      particulars += dots((particular_column_size - journalList->at(i).getDebit().getName().size())-7) + "Dr.";
+      particulars += "To. " + journalList->at(i).getCredit().getName() + " A/c\n";
       particulars += "(" + journalList->at(i).getNarration() + ")";
 
       std::string r[4] {
@@ -114,7 +110,7 @@ void journalEntries(std::vector<Journal>* journalList,
   std::cout << table.draw();
 }
 
-void ledger(std::vector<Journal>* journalList, 
+void ledger(std::vector<Journal>* journalList,
   std::map<std::string, std::string>* metaDataMap, int from_time, int to_time, std::string account) {
 
   int openingBalance=0, closingBalance=0, adjustedBalance=0, total=0;
@@ -130,12 +126,12 @@ void ledger(std::vector<Journal>* journalList,
   for (size_t i = 0; i < journalList->size(); i++) {
     // entry is related to given account
     x+=1;
-    if (journalList->at(i).getDebit() == account 
-      || journalList->at(i).getCredit() == account) {
+    if (journalList->at(i).getDebit().getName() == account
+      || journalList->at(i).getCredit().getName() == account) {
 
       // calculation of opening balance
       if (journalList->at(i).getTime() < from_time) {
-        if (journalList->at(i).getDebit() == account) openingBalance += journalList->at(i).getAmount();
+        if (journalList->at(i).getDebit().getName() == account) openingBalance += journalList->at(i).getAmount();
         else openingBalance -= journalList->at(i).getAmount();
       }
       else {
@@ -166,17 +162,17 @@ void ledger(std::vector<Journal>* journalList,
   }
 
   for (size_t i = x; i < journalList->size(); i++) {
-    if (journalList->at(i).getDebit() == account
-      || journalList->at(i).getCredit() == account) { 
+    if (journalList->at(i).getDebit().getName() == account
+      || journalList->at(i).getCredit().getName() == account) {
 
       // calculation of closing balance
       if (journalList->at(i).getTime() <= to_time && journalList->at(i).getTime() > from_time) {
-        if (journalList->at(i).getDebit() == account) {
+        if (journalList->at(i).getDebit().getName() == account) {
           adjustedBalance += journalList->at(i).getAmount();
           total += journalList->at(i).getAmount(); // total needs to keep track of one side
           std::array<std::string, 4> dr;
           dr[0] = timestampToString(journalList->at(i).getTime());
-          dr[1] = ("To." + journalList->at(i).getCredit() + " A/c");
+          dr[1] = ("To." + journalList->at(i).getCredit().getName() + " A/c");
           dr[2] = std::to_string(journalList->at(i).getId());
           dr[3] = currency + formatCurrency(journalList->at(i).getAmount(), currencyFormat);
           drRows.push_back(dr);
@@ -185,7 +181,7 @@ void ledger(std::vector<Journal>* journalList,
           adjustedBalance -= journalList->at(i).getAmount();
           std::array<std::string, 4> cr;
           cr[0] = timestampToString(journalList->at(i).getTime());
-          cr[1] = ("By." + journalList->at(i).getDebit() + " A/c");
+          cr[1] = ("By." + journalList->at(i).getDebit().getName() + " A/c");
           cr[2] = std::to_string(journalList->at(i).getId());
           cr[3] = currency + formatCurrency(journalList->at(i).getAmount(), currencyFormat);
           crRows.push_back(cr);
