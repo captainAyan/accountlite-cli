@@ -1,22 +1,22 @@
 <p align="center">
-  <h1 align="center">Account Lite 💡</h1>
+  <h1 align="center">Account Lite CLI 💡</h1>
   <p align="center">
     Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
-    <a href="https://captainayan.github.io/accountlite/#docs">Documentation</a> &nbsp;
-    <a href="https://github.com/captainAyan/accountlite/issues">Report Bug 😓</a>
+    <a href="https://captainayan.github.io/accountlite/cli/#docs">Documentation</a> &nbsp;
+    <a href="https://github.com/captainAyan/accountlite-cli/issues">Report Bug 😓</a>
   </p>
 </p>
 
-[![Screenshot](https://raw.githubusercontent.com/captainAyan/accountlite/main/screenshots/1.png)](https://github.com/captainAyan/accountlite)
+[![Screenshot](https://raw.githubusercontent.com/captainAyan/accountlite-cli/main/screenshots/1.png)](https://github.com/captainAyan/accountlite-cli)
 
 ## About
 
-Account Lite is a lightweight accounting software with recording financial transactions (no inventory management available), classification(ledgers), and summarization(trial balance). The data is stored in a human readable format (which is very similar to CSV).
+Account Lite CLI is a lightweight accounting software with recording financial transactions (no inventory management available), classification(ledgers), and summarization(trial balance). The data is stored in a human readable format (which is very similar to CSV).
 
 ## Getting Started
 ### As User
-Download the `accountlite.exe` binary executable file from the latest [release](https://github.com/captainAyan/accountlite/releases/latest)
+Download the `accountlite.exe` binary executable file from the latest [release](https://github.com/captainAyan/accountlite-cli/releases/latest)
 
 ### As Developer
 ⚠ You must have [MinGW](https://sourceforge.net/projects/mingw/) installed and setup on your computer. Check by typing `g++ --h` in your command line.
@@ -30,14 +30,14 @@ Download the `accountlite.exe` binary executable file from the latest [release](
 2. Run `make.sh` or `./make.sh`
 
 ## Documentation (For User)
-Documentation is available [here](https://captainayan.github.io/accountlite/#docs)
+Documentation is available [here](https://captainayan.github.io/accountlite/cli/#docs)
 
 ## File Description (For Developer)
 File Name | Description
 -|-|
-book.bk | This is our own format of storing the data. the values starting with Hash sign (#) are meta data, and the others are journal entries.
+book.bk | This is our own format of storing the data.
 commands.h | This file contains all the valid commands
-journal.h | This is a model for 'Journal Entries' (if you don't know what that is, check double-entry system on wikipedia)
+model.h | This is a model for Journal, Ledger, and Entry
 main.cpp | Duh 😒
 make.bat | This file compiles the program for windows
 <span>make</span>.sh | This file compiles the program for mac and linux
