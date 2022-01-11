@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">Account Lite CLI 💡</h1>
+  <h1 align="center">AccountLite CLI 💡</h1>
   <p align="center">
     Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
@@ -12,7 +12,7 @@
 
 ## About
 
-Account Lite CLI is a lightweight accounting software with recording financial transactions (no inventory management available), classification(ledgers), and summarization(trial balance). The data is stored in a human readable format (which is very similar to CSV).
+AccountLite CLI is a lightweight accounting software with recording financial transactions (no inventory management available), classification(ledgers), and summarization(trial balance). The data is stored in a human readable format (which is very similar to CSV).
 
 ## Getting Started
 ### As User
