@@ -3,7 +3,7 @@
   <p align="center">
     Lightweight Double-Entry Accounting 💸 Software 🚀
     <br />
-    <a href="https://captainayan.github.io/accountlite/cli/#docs">Documentation</a> &nbsp;
+    <a href="https://captainayan.github.io/accountlite/cli#docs">Documentation</a> &nbsp;
     <a href="https://github.com/captainAyan/accountlite-cli/issues">Report Bug 😓</a>
   </p>
 </p>
@@ -30,7 +30,7 @@ Download the `accountlite.exe` binary executable file from the latest [release](
 2. Run `make.sh` or `./make.sh`
 
 ## Documentation (For User)
-Documentation is available [here](https://captainayan.github.io/accountlite/cli/#docs)
+Documentation is available [here](https://captainayan.github.io/accountlite/cli#docs)
 
 ## File Description (For Developer)
 File Name | Description
