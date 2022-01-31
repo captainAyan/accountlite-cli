@@ -105,7 +105,8 @@ void printCredit() {
   std::cout << "######################################" << std::endl;
   std::cout << "#                                    #" << std::endl;
   std::cout << "#   WELCOME TO ACCOUNTLITE           #" << std::endl;
-  std::cout << "#               - Ayan Chakraborty   #" << std::endl;
+  std::cout << "#            - Ayan Chakraborty      #" << std::endl;
+  std::cout << "#            - @captainAyan (Github) #" << std::endl;
   std::cout << "#                                    #" << std::endl;
   std::cout << "######################################" << std::endl;
 }
